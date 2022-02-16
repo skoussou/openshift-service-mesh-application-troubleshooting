@@ -436,8 +436,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 
 
 * Istiod POD
-
-Check for any potential failures of the IstioD Service Mesh control plane component to distribute the configurations. Sometimes a restart of the POD can resolve issues
+** Check for any potential failures of the IstioD Service Mesh control plane component to distribute the configurations. Sometimes a restart of the POD can resolve issues
 
 	oc logs -f <istiod-basic-install> -n istio-system
 
@@ -446,132 +445,140 @@ Check for any potential failures of the IstioD Service Mesh control plane compon
 
 * Scaling
 
-Check that Service Mesh components are scaled out based on SMCP configuration. Apply debugging as per SMCP configuration investigation of
-
+** Check that Service Mesh components are scaled out based on SMCP configuration. Apply debugging as per SMCP configuration investigation of
 ** xref:anchor-5[POD Replicas Desired/Created]
 ** xref:anchor-6[POD Defined Tolerations]
 
 === POD contains updated Service Mesh Configurations
-Retrieve differences between Service Mesh Envoys (istio-proxy, istio-ingress, istio-egress)  and Service Mesh control plan (Istiod PODs)
-/istioctl proxy-status -i <ISTO SMCP namespace-name> <pod-name> -n <namespace-name>
-Clusters Match
-Listeners Match
-Routes Match (RDS last loaded at Wed, 27 Oct 2021 08:09:01 BST)
+* Retrieve differences between Service Mesh Envoys (istio-proxy, istio-ingress, istio-egress)  and Service Mesh control plan (Istiod PODs)
+
+	/istioctl proxy-status -i <ISTO SMCP namespace-name> <pod-name> -n <namespace-name>
+	Clusters Match
+	Listeners Match
+	Routes Match (RDS last loaded at Wed, 27 Oct 2021 08:09:01 BST)
 
 
 === Service Mesh (Deep Dive) Troubleshooting Actions - Envoy(istio-proxy)
-Debug Service Mesh configurations (and their state). Required knowledge includes:
-Envoy Basics (clusters, listeners, routes, and filters as well as discovery services -xDs,LDS,CDS,RDS) Understanding
 
-Get an overview of your mesh and if things are in SYNC between control and data planes
- (if not and it remains this way some restarts of control/data plane components or the cause behind this mismatch by checking logs may be required)
-/istioctl proxy-status -i <ISTO SMCP namespace-name>
-NAME                                                           CDS        LDS        EDS        RDS          ISTIOD                               VERSION
-istio-egressgateway-84949c6486-4djpr.istio-system-tenant-4     SYNCED     SYNCED     SYNCED     NOT SENT     istiod-tenant-4-75f7766b69-hd2d4     1.6.14
-istio-ingressgateway-f7ff74747-ddq66.istio-system-tenant-4     SYNCED     SYNCED     SYNCED     SYNCED       istiod-tenant-4-75f7766b69-hd2d4     1.6.14
-prometheus-779f8b557b-5ffqw.istio-system-tenant-4              SYNCED     SYNCED     SYNCED     SYNCED       istiod-tenant-4-75f7766b69-hd2d4     1.6.14
-quarkus-rest-503-2-w77v8.greetings-service                     SYNCED     SYNCED     SYNCED     SYNCED       istiod-tenant-4-75f7766b69-hd2d4     1.6.14
-rest-greeting-remote-3-2kw74.greetings-service                 SYNCED     SYNCED     SYNCED     SYNCED       istiod-tenant-4-75f7766b69-hd2d4     1.6.14
-Retrieve differences between envoy settings (Service Mesh istio-proxy containers and istio-ingress/istio-egress PODs)  and istiod
-/istioctl proxy-status -i <ISTO SMCP namespace-name> <pod-name>
-Clusters Match
-Listeners Match
-Routes Match (RDS last loaded at Wed, 27 Oct 2021 08:09:01 BST)
-Deep dive into Envoy configuration
-Follow steps 1-5 Debugging Envoy and Istiod to verify configurations
-listeners on ports you expect requests to arrive
-route for the listener on that port will be pointing to the expected cluster
-envoy will be sending the request on the route and this will be resolving to the endpoints (PODs)
-Step 6
-/istioctl pc endpoints istio-egressgateway-5f6d75944c-twmls |grep hello
-ENDPOINT                   STATUS    OUTLIER CHECK  CLUSTER
-18.218.79.39:80                  HEALTHY     FAILED            outbound|80|target-subset|hello.remote.com
-18.218.79.39:80                  HEALTHY     OK                outbound|80||hello.remote.com
-3.129.198.97:80                  HEALTHY     FAILED            outbound|80|target-subset|hello.remote.com
-3.129.198.97:80                  HEALTHY     OK                outbound|80||hello.remote.com
-34.250.22.123:80                 HEALTHY     FAILED            outbound|80|target-subset|hello.remote.com
-34.250.22.123:80                 HEALTHY     OK                outbound|80||hello.remote.com
-52.17.43.124:80                  HEALTHY     FAILED            outbound|80|target-subset|hello.remote.com
-52.17.43.124:80                  HEALTHY     OK                outbound|80||hello.remote.com
-/istioctl pc endpoints istio-egressgateway-5f6d75944c-twmls |grep hello
-18.218.79.39:80                  HEALTHY     OK                outbound|80|target-subset|hello.remote.com
-18.218.79.39:80                  HEALTHY     OK                outbound|80||hello.remote.com
-3.129.198.97:80                  HEALTHY     OK                outbound|80|target-subset|hello.remote.com
-3.129.198.97:80                  HEALTHY     OK                outbound|80||hello.remote.com
-34.250.22.123:80                 HEALTHY     OK                outbound|80|target-subset|hello.remote.com
-34.250.22.123:80                 HEALTHY     OK                outbound|80||hello.remote.com
-52.17.43.124:80                  HEALTHY     OK                outbound|80|target-subset|hello.remote.com
-52.17.43.124:80                  HEALTHY     OK                outbound|80||hello.remote.com
-Note: Sometimes Service Mesh configuration can be shown as STALE which can be caused by different reasons
-STALE (Never Acknowledged)
-How to solve "stale" issue on istio proxy?
-Action: Check logs for both Pilot and Istio Proxy logs ( Check & Set Logging Levels of Service Mesh Components) to see what is happening. Some resolutions:
-Increasing the Pilot replicas if you have not already to see if there is any improvement (eg. a Service Mesh with 100s of namespaces and even more PODs in the mesh)
-Removing configurations that may be causing issues (usually start at Gateway and VirtualService) eg.
+* Debug Service Mesh configurations (and their state). Required knowledge includes: link:https://jvns.ca/blog/2018/10/27/envoy-basics/[Envoy Basics (clusters, listeners, routes, and filters as well as discovery services -xDs,LDS,CDS,RDS) Understanding]
+
+** Get an overview of your mesh and if things are in `SYNC` between control and data planes (if not and it remains this way some restarts of control/data plane components or the cause behind this mismatch by checking logs may be required)
+
+	/istioctl proxy-status -i <ISTO SMCP namespace-name>
+	NAME                                                           CDS        LDS        EDS        RDS          ISTIOD                               VERSION
+	istio-egressgateway-84949c6486-4djpr.istio-system-tenant-4     SYNCED     SYNCED     SYNCED     NOT SENT     istiod-tenant-4-75f7766b69-hd2d4     1.6.14
+	istio-ingressgateway-f7ff74747-ddq66.istio-system-tenant-4     SYNCED     SYNCED     SYNCED     SYNCED       istiod-tenant-4-75f7766b69-hd2d4     1.6.14
+	prometheus-779f8b557b-5ffqw.istio-system-tenant-4              SYNCED     SYNCED     SYNCED     SYNCED       istiod-tenant-4-75f7766b69-hd2d4     1.6.14
+	quarkus-rest-503-2-w77v8.greetings-service                     SYNCED     SYNCED     SYNCED     SYNCED       istiod-tenant-4-75f7766b69-hd2d4     1.6.14
+	rest-greeting-remote-3-2kw74.greetings-service                 SYNCED     SYNCED     SYNCED     SYNCED       istiod-tenant-4-75f7766b69-hd2d4     1.6.14
+
+** Retrieve differences between envoy settings (Service Mesh istio-proxy containers and istio-ingress/istio-egress PODs)  and istiod
+
+	/istioctl proxy-status -i <ISTO SMCP namespace-name> <pod-name>
+	Clusters Match
+	Listeners Match
+	Routes Match (RDS last loaded at Wed, 27 Oct 2021 08:09:01 BST)
+
+* Deep dive into Envoy configuration. Follow steps link:https://istio.io/latest/docs/ops/diagnostic-tools/proxy-cmd/#deep-dive-into-envoy-configuration[1-5 Debugging Envoy and Istiod] to verify configurations
+** _listeners_ on ports you expect requests to arrive
+** _route_ for the listener on that port will be pointing to the expected cluster
+** envoy will be sending the request on the _route_ and this will be resolving to the endpoints (PODs)
+** Step 6
+
+	/istioctl pc endpoints istio-egressgateway-5f6d75944c-twmls |grep hello
+	ENDPOINT                   STATUS    OUTLIER CHECK  CLUSTER
+	18.218.79.39:80                  HEALTHY     FAILED            outbound|80|target-subset|hello.remote.com
+	18.218.79.39:80                  HEALTHY     OK                outbound|80||hello.remote.com
+	3.129.198.97:80                  HEALTHY     FAILED            outbound|80|target-subset|hello.remote.com
+	3.129.198.97:80                  HEALTHY     OK                outbound|80||hello.remote.com
+	34.250.22.123:80                 HEALTHY     FAILED            outbound|80|target-subset|hello.remote.com
+	34.250.22.123:80                 HEALTHY     OK                outbound|80||hello.remote.com
+	52.17.43.124:80                  HEALTHY     FAILED            outbound|80|target-subset|hello.remote.com
+	52.17.43.124:80                  HEALTHY     OK                outbound|80||hello.remote.com
+
+	/istioctl pc endpoints istio-egressgateway-5f6d75944c-twmls |grep hello
+	18.218.79.39:80                  HEALTHY     OK                outbound|80|target-subset|hello.remote.com
+	18.218.79.39:80                  HEALTHY     OK                outbound|80||hello.remote.com
+	3.129.198.97:80                  HEALTHY     OK                outbound|80|target-subset|hello.remote.com
+	3.129.198.97:80                  HEALTHY     OK                outbound|80||hello.remote.com
+	34.250.22.123:80                 HEALTHY     OK                outbound|80|target-subset|hello.remote.com
+	34.250.22.123:80                 HEALTHY     OK                outbound|80||hello.remote.com
+	52.17.43.124:80                  HEALTHY     OK                outbound|80|target-subset|hello.remote.com
+	52.17.43.124:80                  HEALTHY     OK                outbound|80||hello.remote.com
+
+** Note: Sometimes Service Mesh configuration can be shown as `STALE` which can be caused by different reasons
+*** link:https://github.com/istio/istio/issues/13822[STALE (Never Acknowledged)]
+*** link:https://stackoverflow.com/questions/51977974/how-to-solve-stale-issue-on-istio-proxy[How to solve "stale" issue on istio proxy?]
+** Action: Check logs for both Pilot and Istio Proxy logs ( link:https://docs.google.com/document/d/1bcIZLT3RaBmS03AFQoIi80Tz-PLurCv4Hq4Mw6DOxxQ/edit#heading=h.asahum77e36t[Check & Set Logging Levels of Service Mesh Components)] to see what is happening. 
+** Some resolutions:
+*** Increasing the Pilot replicas if you have not already to see if there is any improvement (eg. a Service Mesh with 100s of namespaces and even more PODs in the mesh)
+*** Removing configurations that may be causing issues (usually start at Gateway and VirtualService) eg.
+
             Gateway with
              name: http
-       port: 80 -> which translated to node on port 80 (should have been 8080 (so pod port of the service)
+             port: 80 -> which translated to node on port 80 (should have been 8080 (so pod port of the service)
 
              /istiocl proxy-status on istio-ingressgateway - failure on http.80 then searched Gateways that are setting this route
 
 
-Analyze Istio configuration and print validation messages
+** Analyze Istio configuration and print validation messages
 
-/istioctl analyze 
+	/istioctl analyze 
 
-Error [IST0109] (VirtualService example-query-service-shared-service-test-egress-vs.istio-system) The VirtualServices istio-system/example-query-service,istio-system/example-query-service-shared-service-test-egress-vs associated with mesh gateway define the same host */172.99.99.99 which can lead to undefined behavior. This can be fixed by merging the conflicting VirtualServices into a single resource.
+	Error [IST0109] (VirtualService example-query-service-shared-service-test-egress-vs.istio-system) The VirtualServices istio-system/example-query-service,istio-system/example-query-service-shared-service-test-egress-vs associated with mesh gateway define the same host */172.99.99.99 which can lead to undefined behavior. This can be fixed by merging the conflicting VirtualServices into a single resource.
 
 
-Envoy Proxy Config Dump
-From any deployed application with an istio-proxy sidecar container, run:
-oc rsh pod <istio_sidecar_pod_name> -c istio-proxy curl -X POST localhost:15000/config_dump
-Then look for the envoy cluster name where you want to enable mTLS + gRPC, and its config should look like:
-...
-"cluster": {
-      "name": "outbound|443|custom|istio-custom-egressgateway.istio-system.svc.cluster.local",
-...
-      "tls_context": {
-       "common_tls_context": {
-        "tls_certificates": [
-...
-        "alpnProtocols": [
-                    "istio"
-                ]
-...
+* Envoy Proxy Config Dump
+** From any deployed application with an istio-proxy sidecar container, run:
+	oc rsh pod <istio_sidecar_pod_name> -c istio-proxy curl -X POST localhost:15000/config_dump
 
-After the changes have been applied the same instruction would return:
-...
-"cluster": {
-      "name": "outbound|443|custom|istio-custom-egressgateway.istio-system.svc.cluster.local",
-...
-      "tls_context": {
-       "common_tls_context": {
-        "tls_certificates": [
-...
-        "alpnProtocols": [
-                    "istio",
-                    "H2"
-                ]
-...
+** Then look for the envoy cluster name where you want to enable mTLS + gRPC, and its config should look like:
 
-Follow Appendix D: Analyze Envoy Clusters Config
-How to debug your Istio networking configuration
+	...
+	"cluster": {
+	      "name": "outbound|443|custom|istio-custom-egressgateway.istio-system.svc.cluster.local",
+	...
+	      "tls_context": {
+	       "common_tls_context": {
+		"tls_certificates": [
+	...
+		"alpnProtocols": [
+		            "istio"
+		        ]
+	...
+
+** After the changes have been applied the same instruction would return:
+	...
+	"cluster": {
+	      "name": "outbound|443|custom|istio-custom-egressgateway.istio-system.svc.cluster.local",
+	...
+	      "tls_context": {
+	       "common_tls_context": {
+		"tls_certificates": [
+	...
+		"alpnProtocols": [
+		            "istio",
+		            "H2"
+		        ]
+	...
+* xref:anchor-7[Follow Appendix D: Analyze Envoy Clusters Config]
+* link:https://www.tetrate.io/blog/debugging-your-istio-networking-configuration/[How to debug your Istio networking configuration]
 
 === Service Mesh Observability
-Access Kiali Console
-From the Namespace menu, select your application namespace, for example, bookinfo.
-To choose a different graph layout, do either or both of the following:
-Select different graph data groupings from the menu at the top of the graph and enhance with ‘Display’ features
-App graph
-Service graph
-Versioned App graph (default)
-Workload graph
-Checking Service Mesh Infrastructure Healt with Kiali Console
-Checking Service Mesh Topology with Kiali Console
-Checking Tracing withing the Service Mesh with Kiali Console
-Kiali Validations on Service Mesh Configuration Objects
-See some possible errors configuration errors uncovered by KIALI
-Access Jaeger Console
+* Access link:https://docs.openshift.com/container-platform/4.9/service_mesh/v2x/ossm-troubleshooting-istio.html#ossm-accessing-kiali-console_troubleshooting-ossm[Kiali Console]
+** From the Namespace menu, select your application namespace, for example, bookinfo.
+** To choose a different graph layout, do either or both of the following:
+** Select different graph data groupings from the menu at the top of the graph and enhance with ‘Display’ features
+*** App graph
+*** Service graph
+*** Versioned App graph (default)
+*** Workload graph
+** link:https://kiali.io/docs/features/health/[Checking Service Mesh Infrastructure Healt with Kiali Console]
+** link:https://kiali.io/docs/features/topology/[Checking Service Mesh Topology with Kiali Console]
+** link:https://kiali.io/docs/features/tracing/[Checking Tracing withing the Service Mesh with Kiali Console]
+** link:https://kiali.io/docs/features/validations/[Kiali Validations on Service Mesh Configuration Objects]
+** link:https://istio.io/latest/docs/tasks/observability/kiali/#viewing-and-editing-istio-configuration-yaml[See some possible errors configuration errors uncovered by KIALI]
+* Access link:https://docs.openshift.com/container-platform/4.9/service_mesh/v2x/ossm-troubleshooting-istio.html#ossm-accessing-jaeger-console_troubleshooting-ossm[Jaeger Console]
 
 == D.4 Application
 Application Logs
@@ -844,168 +851,163 @@ Steps describe configurations required to expose for external calls a Service Me
 	    - '*' 
 
 
-
-
-
-
-
-
-
-
-
+[[anchor-7]]
 == Appendix D: Analyze Envoy Clusters Config
-See a-crash-course-for-running-istio 
+See link:https://medium.com/namely-labs/a-crash-course-for-running-istio-1c6125930715[a-crash-course-for-running-istio ]
 
-/home/stkousso/Stelios/sw11/PAAS/Cloud-Tooling/ISTIO/ISTIO-Tooling/istioctl-1.11.3/istioctl proxy-config cluster control-5fcd7bb48d-m7dpl
-SERVICE FQDN                                                 PORT      SUBSET         DIRECTION     TYPE             DESTINATION RULE
-BlackHoleCluster                                             -         -              -             STATIC           
-InboundPassthroughClusterIpv4                                -         -              -             ORIGINAL_DST     
-InboundPassthroughClusterIpv6                                -         -              -             ORIGINAL_DST     
-PassthroughCluster                                           -         -              -             ORIGINAL_DST     
-agent                                                        -         -              -             STATIC           
-cars.travel-agency.svc.cluster.local                         8000      -              outbound      EDS              
-control.travel-control.svc.cluster.local                     8080      -              outbound      EDS              control.travel-control
-control.travel-control.svc.cluster.local                     8080      http           inbound       STATIC           
-control.travel-control.svc.cluster.local                     8080      v1             outbound      EDS              control.travel-control
-discounts.travel-agency.svc.cluster.local                    8000      -              outbound      EDS              
-flights.travel-agency.svc.cluster.local                      8000      -              outbound      EDS              
-getting-started.demo-a-1.svc.cluster.local                   8080      -              outbound      EDS              
-grafana.istio-system.svc.cluster.local                       3000      -              outbound      EDS              
-hotels.travel-agency.svc.cluster.local                       8000      -              outbound      EDS              
-insurances.travel-agency.svc.cluster.local                   8000      -              outbound      EDS              
-istio-egressgateway.istio-system.svc.cluster.local           80        -              outbound      EDS              
-istio-egressgateway.istio-system.svc.cluster.local           443       -              outbound      EDS              
-istio-egressgateway.istio-system.svc.cluster.local           15443     -              outbound      EDS              
-istio-ingressgateway.istio-system.svc.cluster.local          80        -              outbound      EDS              
-istio-ingressgateway.istio-system.svc.cluster.local          443       -              outbound      EDS              
-istio-ingressgateway.istio-system.svc.cluster.local          15021     -              outbound      EDS              
-istio-ingressgateway.istio-system.svc.cluster.local          15443     -              outbound      EDS              
-istiod-basic.istio-system.svc.cluster.local                  443       -              outbound      EDS              
-istiod-basic.istio-system.svc.cluster.local                  853       -              outbound      EDS              
-istiod-basic.istio-system.svc.cluster.local                  15010     -              outbound      EDS              
-istiod-basic.istio-system.svc.cluster.local                  15012     -              outbound      EDS              
-istiod-basic.istio-system.svc.cluster.local                  15014     -              outbound      EDS              
-jaeger-agent.istio-system.svc.cluster.local                  5778      -              outbound      ORIGINAL_DST     
-jaeger-collector-headless.istio-system.svc.cluster.local     9411      -              outbound      ORIGINAL_DST     
-jaeger-collector-headless.istio-system.svc.cluster.local     14250     -              outbound      ORIGINAL_DST     
-jaeger-collector-headless.istio-system.svc.cluster.local     14267     -              outbound      ORIGINAL_DST     
-jaeger-collector-headless.istio-system.svc.cluster.local     14268     -              outbound      ORIGINAL_DST     
-jaeger-collector.istio-system.svc.cluster.local              9411      -              outbound      EDS              
-jaeger-collector.istio-system.svc.cluster.local              14250     -              outbound      EDS              
-jaeger-collector.istio-system.svc.cluster.local              14267     -              outbound      EDS              
-jaeger-collector.istio-system.svc.cluster.local              14268     -              outbound      EDS              
-jaeger-query.istio-system.svc.cluster.local                  443       -              outbound      EDS              
-kiali.istio-system.svc.cluster.local                         9090      -              outbound      EDS              
-kiali.istio-system.svc.cluster.local                         20001     -              outbound      EDS              
-mgmtCluster                                                  15021     mgmt-15021     inbound       STATIC           
-mysqldb.travel-agency.svc.cluster.local                      3306      -              outbound      EDS              
-prometheus.istio-system.svc.cluster.local                    9090      -              outbound      EDS              
-prometheus_stats                                             -         -              -             STATIC           
-sds-grpc                                                     -         -              -             STATIC           
-travels.travel-agency.svc.cluster.local                      8000      -              outbound      EDS              
-travels.travel-portal.svc.cluster.local                      8000      -              outbound      EDS              
-viaggi.travel-portal.svc.cluster.local                       8000      -              outbound      EDS              
-voyages.travel-portal.svc.cluster.local                      8000      -              outbound      EDS              
-xds-grpc                                                     -         -              -             STRICT_DNS       
-zipkin                                                       -         -              -             STRICT_DNS       
-/home/stkousso/Stelios/sw11/PAAS/Cloud-Tooling/ISTIO/ISTIO-Tooling/istioctl-1.11.3/istioctl proxy-config endpoint control-5fcd7bb48d-m7dpl
-ENDPOINT                         STATUS      OUTLIER CHECK     CLUSTER
-10.128.2.13:8000                 HEALTHY     OK                outbound|8000|primary|travels.travel-agency.svc.cluster.local
-10.128.2.15:8000                 HEALTHY     OK                outbound|8000|primary|insurances.travel-agency.svc.cluster.local
-10.128.2.17:15010                HEALTHY     OK                outbound|15010||istiod-basic.istio-system.svc.cluster.local
-10.128.2.17:15012                HEALTHY     OK                outbound|15012||istiod-basic.istio-system.svc.cluster.local
-10.128.2.17:15014                HEALTHY     OK                outbound|15014||istiod-basic.istio-system.svc.cluster.local
-10.128.2.17:15017                HEALTHY     OK                outbound|443||istiod-basic.istio-system.svc.cluster.local
-10.128.2.17:15053                HEALTHY     OK                outbound|853||istiod-basic.istio-system.svc.cluster.local
-10.128.2.20:8080                 HEALTHY     OK                outbound|8080||getting-started.demo-a-1.svc.cluster.local
-10.128.2.24:8000                 HEALTHY     OK                outbound|8000||voyages.travel-portal.svc.cluster.local
-10.128.2.25:8000                 HEALTHY     OK                outbound|8000||viaggi.travel-portal.svc.cluster.local
-10.128.2.26:8000                 HEALTHY     OK                outbound|8000||flights.travel-agency.svc.cluster.local
-10.128.2.27:3306                 HEALTHY     OK                outbound|3306||mysqldb.travel-agency.svc.cluster.local
-10.128.2.3:8443                  HEALTHY     OK                outbound|443||jaeger-query.istio-system.svc.cluster.local
-10.128.2.3:9411                  HEALTHY     OK                outbound|9411||jaeger-collector.istio-system.svc.cluster.local
-10.128.2.3:9411                  HEALTHY     OK                outbound|9411||zipkin.istio-system.svc.cluster.local
-10.128.2.3:14250                 HEALTHY     OK                outbound|14250||jaeger-collector.istio-system.svc.cluster.local
-10.128.2.3:14267                 HEALTHY     OK                outbound|14267||jaeger-collector.istio-system.svc.cluster.local
-10.128.2.3:14268                 HEALTHY     OK                outbound|14268||jaeger-collector.istio-system.svc.cluster.local
-10.128.2.30:8080                 HEALTHY     OK                outbound|8080|v1|control.travel-control.svc.cluster.local
-10.128.2.30:8080                 HEALTHY     OK                outbound|8080||control.travel-control.svc.cluster.local
-10.128.2.5:9090                  HEALTHY     OK                outbound|9090||kiali.istio-system.svc.cluster.local
-10.128.2.5:20001                 HEALTHY     OK                outbound|20001||kiali.istio-system.svc.cluster.local
-10.128.2.8:8000                  HEALTHY     OK                outbound|8000||travels.travel-portal.svc.cluster.local
-10.128.2.9:8000                  HEALTHY     OK                outbound|8000||cars.travel-agency.svc.cluster.local
-10.131.0.10:8000                 HEALTHY     OK                outbound|8000||travels.travel-agency.svc.cluster.local
-10.131.0.12:3001                 HEALTHY     OK                outbound|9090||prometheus.istio-system.svc.cluster.local
-10.131.0.14:8080                 HEALTHY     OK                outbound|80||istio-ingressgateway.istio-system.svc.cluster.local
-10.131.0.14:8443                 HEALTHY     OK                outbound|443||istio-ingressgateway.istio-system.svc.cluster.local
-10.131.0.14:15021                HEALTHY     OK                outbound|15021||istio-ingressgateway.istio-system.svc.cluster.local
-10.131.0.14:15443                HEALTHY     OK                outbound|15443||istio-ingressgateway.istio-system.svc.cluster.local
-10.131.0.19:8000                 HEALTHY     OK                outbound|8000||hotels.travel-agency.svc.cluster.local
-10.131.0.2:3001                  HEALTHY     OK                outbound|3000||grafana.istio-system.svc.cluster.local
-10.131.0.5:8080                  HEALTHY     OK                outbound|80||istio-egressgateway.istio-system.svc.cluster.local
-10.131.0.5:8443                  HEALTHY     OK                outbound|443||istio-egressgateway.istio-system.svc.cluster.local
-10.131.0.5:15443                 HEALTHY     OK                outbound|15443||istio-egressgateway.istio-system.svc.cluster.local
-10.131.0.8:8000                  HEALTHY     OK                outbound|8000||discounts.travel-agency.svc.cluster.local
-10.131.0.9:8000                  HEALTHY     OK                outbound|8000||travels.travel-agency.svc.cluster.local
-127.0.0.1:8080                   HEALTHY     OK                inbound|8080|http|control.travel-control.svc.cluster.local
-127.0.0.1:15000                  HEALTHY     OK                prometheus_stats
-127.0.0.1:15020                  HEALTHY     OK                agent
-127.0.0.1:15021                  HEALTHY     OK                inbound|15021|mgmt-15021|mgmtCluster
-172.30.2.27:15012                HEALTHY     OK                xds-grpc
-172.30.46.53:9411                HEALTHY     OK                zipkin
-unix://./etc/istio/proxy/SDS     HEALTHY     OK                sds-grpc
-$ oc get endpoints
-NAME      ENDPOINTS          AGE
-control   10.128.2.30:8080   43h
+	$ istioctl proxy-config cluster control-5fcd7bb48d-m7dpl
+	SERVICE FQDN                                                 PORT      SUBSET         DIRECTION     TYPE             DESTINATION RULE
+	BlackHoleCluster                                             -         -              -             STATIC           
+	InboundPassthroughClusterIpv4                                -         -              -             ORIGINAL_DST     
+	InboundPassthroughClusterIpv6                                -         -              -             ORIGINAL_DST     
+	PassthroughCluster                                           -         -              -             ORIGINAL_DST     
+	agent                                                        -         -              -             STATIC           
+	cars.travel-agency.svc.cluster.local                         8000      -              outbound      EDS              
+	control.travel-control.svc.cluster.local                     8080      -              outbound      EDS              control.travel-control
+	control.travel-control.svc.cluster.local                     8080      http           inbound       STATIC           
+	control.travel-control.svc.cluster.local                     8080      v1             outbound      EDS              control.travel-control
+	discounts.travel-agency.svc.cluster.local                    8000      -              outbound      EDS              
+	flights.travel-agency.svc.cluster.local                      8000      -              outbound      EDS              
+	getting-started.demo-a-1.svc.cluster.local                   8080      -              outbound      EDS              
+	grafana.istio-system.svc.cluster.local                       3000      -              outbound      EDS              
+	hotels.travel-agency.svc.cluster.local                       8000      -              outbound      EDS              
+	insurances.travel-agency.svc.cluster.local                   8000      -              outbound      EDS              
+	istio-egressgateway.istio-system.svc.cluster.local           80        -              outbound      EDS              
+	istio-egressgateway.istio-system.svc.cluster.local           443       -              outbound      EDS              
+	istio-egressgateway.istio-system.svc.cluster.local           15443     -              outbound      EDS              
+	istio-ingressgateway.istio-system.svc.cluster.local          80        -              outbound      EDS              
+	istio-ingressgateway.istio-system.svc.cluster.local          443       -              outbound      EDS              
+	istio-ingressgateway.istio-system.svc.cluster.local          15021     -              outbound      EDS              
+	istio-ingressgateway.istio-system.svc.cluster.local          15443     -              outbound      EDS              
+	istiod-basic.istio-system.svc.cluster.local                  443       -              outbound      EDS              
+	istiod-basic.istio-system.svc.cluster.local                  853       -              outbound      EDS              
+	istiod-basic.istio-system.svc.cluster.local                  15010     -              outbound      EDS              
+	istiod-basic.istio-system.svc.cluster.local                  15012     -              outbound      EDS              
+	istiod-basic.istio-system.svc.cluster.local                  15014     -              outbound      EDS              
+	jaeger-agent.istio-system.svc.cluster.local                  5778      -              outbound      ORIGINAL_DST     
+	jaeger-collector-headless.istio-system.svc.cluster.local     9411      -              outbound      ORIGINAL_DST     
+	jaeger-collector-headless.istio-system.svc.cluster.local     14250     -              outbound      ORIGINAL_DST     
+	jaeger-collector-headless.istio-system.svc.cluster.local     14267     -              outbound      ORIGINAL_DST     
+	jaeger-collector-headless.istio-system.svc.cluster.local     14268     -              outbound      ORIGINAL_DST     
+	jaeger-collector.istio-system.svc.cluster.local              9411      -              outbound      EDS              
+	jaeger-collector.istio-system.svc.cluster.local              14250     -              outbound      EDS              
+	jaeger-collector.istio-system.svc.cluster.local              14267     -              outbound      EDS              
+	jaeger-collector.istio-system.svc.cluster.local              14268     -              outbound      EDS              
+	jaeger-query.istio-system.svc.cluster.local                  443       -              outbound      EDS              
+	kiali.istio-system.svc.cluster.local                         9090      -              outbound      EDS              
+	kiali.istio-system.svc.cluster.local                         20001     -              outbound      EDS              
+	mgmtCluster                                                  15021     mgmt-15021     inbound       STATIC           
+	mysqldb.travel-agency.svc.cluster.local                      3306      -              outbound      EDS              
+	prometheus.istio-system.svc.cluster.local                    9090      -              outbound      EDS              
+	prometheus_stats                                             -         -              -             STATIC           
+	sds-grpc                                                     -         -              -             STATIC           
+	travels.travel-agency.svc.cluster.local                      8000      -              outbound      EDS              
+	travels.travel-portal.svc.cluster.local                      8000      -              outbound      EDS              
+	viaggi.travel-portal.svc.cluster.local                       8000      -              outbound      EDS              
+	voyages.travel-portal.svc.cluster.local                      8000      -              outbound      EDS              
+	xds-grpc                                                     -         -              -             STRICT_DNS       
+	zipkin                                                       -         -              -             STRICT_DNS       
+
+	$ istioctl proxy-config endpoint control-5fcd7bb48d-m7dpl
+	ENDPOINT                         STATUS      OUTLIER CHECK     CLUSTER
+	10.128.2.13:8000                 HEALTHY     OK                outbound|8000|primary|travels.travel-agency.svc.cluster.local
+	10.128.2.15:8000                 HEALTHY     OK                outbound|8000|primary|insurances.travel-agency.svc.cluster.local
+	10.128.2.17:15010                HEALTHY     OK                outbound|15010||istiod-basic.istio-system.svc.cluster.local
+	10.128.2.17:15012                HEALTHY     OK                outbound|15012||istiod-basic.istio-system.svc.cluster.local
+	10.128.2.17:15014                HEALTHY     OK                outbound|15014||istiod-basic.istio-system.svc.cluster.local
+	10.128.2.17:15017                HEALTHY     OK                outbound|443||istiod-basic.istio-system.svc.cluster.local
+	10.128.2.17:15053                HEALTHY     OK                outbound|853||istiod-basic.istio-system.svc.cluster.local
+	10.128.2.20:8080                 HEALTHY     OK                outbound|8080||getting-started.demo-a-1.svc.cluster.local
+	10.128.2.24:8000                 HEALTHY     OK                outbound|8000||voyages.travel-portal.svc.cluster.local
+	10.128.2.25:8000                 HEALTHY     OK                outbound|8000||viaggi.travel-portal.svc.cluster.local
+	10.128.2.26:8000                 HEALTHY     OK                outbound|8000||flights.travel-agency.svc.cluster.local
+	10.128.2.27:3306                 HEALTHY     OK                outbound|3306||mysqldb.travel-agency.svc.cluster.local
+	10.128.2.3:8443                  HEALTHY     OK                outbound|443||jaeger-query.istio-system.svc.cluster.local
+	10.128.2.3:9411                  HEALTHY     OK                outbound|9411||jaeger-collector.istio-system.svc.cluster.local
+	10.128.2.3:9411                  HEALTHY     OK                outbound|9411||zipkin.istio-system.svc.cluster.local
+	10.128.2.3:14250                 HEALTHY     OK                outbound|14250||jaeger-collector.istio-system.svc.cluster.local
+	10.128.2.3:14267                 HEALTHY     OK                outbound|14267||jaeger-collector.istio-system.svc.cluster.local
+	10.128.2.3:14268                 HEALTHY     OK                outbound|14268||jaeger-collector.istio-system.svc.cluster.local
+	10.128.2.30:8080                 HEALTHY     OK                outbound|8080|v1|control.travel-control.svc.cluster.local
+	10.128.2.30:8080                 HEALTHY     OK                outbound|8080||control.travel-control.svc.cluster.local
+	10.128.2.5:9090                  HEALTHY     OK                outbound|9090||kiali.istio-system.svc.cluster.local
+	10.128.2.5:20001                 HEALTHY     OK                outbound|20001||kiali.istio-system.svc.cluster.local
+	10.128.2.8:8000                  HEALTHY     OK                outbound|8000||travels.travel-portal.svc.cluster.local
+	10.128.2.9:8000                  HEALTHY     OK                outbound|8000||cars.travel-agency.svc.cluster.local
+	10.131.0.10:8000                 HEALTHY     OK                outbound|8000||travels.travel-agency.svc.cluster.local
+	10.131.0.12:3001                 HEALTHY     OK                outbound|9090||prometheus.istio-system.svc.cluster.local
+	10.131.0.14:8080                 HEALTHY     OK                outbound|80||istio-ingressgateway.istio-system.svc.cluster.local
+	10.131.0.14:8443                 HEALTHY     OK                outbound|443||istio-ingressgateway.istio-system.svc.cluster.local
+	10.131.0.14:15021                HEALTHY     OK                outbound|15021||istio-ingressgateway.istio-system.svc.cluster.local
+	10.131.0.14:15443                HEALTHY     OK                outbound|15443||istio-ingressgateway.istio-system.svc.cluster.local
+	10.131.0.19:8000                 HEALTHY     OK                outbound|8000||hotels.travel-agency.svc.cluster.local
+	10.131.0.2:3001                  HEALTHY     OK                outbound|3000||grafana.istio-system.svc.cluster.local
+	10.131.0.5:8080                  HEALTHY     OK                outbound|80||istio-egressgateway.istio-system.svc.cluster.local
+	10.131.0.5:8443                  HEALTHY     OK                outbound|443||istio-egressgateway.istio-system.svc.cluster.local
+	10.131.0.5:15443                 HEALTHY     OK                outbound|15443||istio-egressgateway.istio-system.svc.cluster.local
+	10.131.0.8:8000                  HEALTHY     OK                outbound|8000||discounts.travel-agency.svc.cluster.local
+	10.131.0.9:8000                  HEALTHY     OK                outbound|8000||travels.travel-agency.svc.cluster.local
+	127.0.0.1:8080                   HEALTHY     OK                inbound|8080|http|control.travel-control.svc.cluster.local
+	127.0.0.1:15000                  HEALTHY     OK                prometheus_stats
+	127.0.0.1:15020                  HEALTHY     OK                agent
+	127.0.0.1:15021                  HEALTHY     OK                inbound|15021|mgmt-15021|mgmtCluster
+	172.30.2.27:15012                HEALTHY     OK                xds-grpc
+	172.30.46.53:9411                HEALTHY     OK                zipkin
+	unix://./etc/istio/proxy/SDS     HEALTHY     OK                sds-grpc
+
+	$ oc get endpoints
+	NAME      ENDPOINTS          AGE
+	control   10.128.2.30:8080   43h
 
 
-oc get endpoints -n travel-agency
-NAME         ENDPOINTS                                           AGE
-cars         10.128.2.9:8000                                     43h
-discounts    10.131.0.8:8000                                     43h
-flights      10.128.2.26:8000                                    43h
-hotels       10.131.0.19:8000                                    43h
-insurances   10.128.2.15:8000                                    43h
-mysqldb      10.128.2.27:3306                                    43h
-travels      10.128.2.13:8000,10.131.0.10:8000,10.131.0.9:8000   43h
+	$ oc get endpoints -n travel-agency
+	NAME         ENDPOINTS                                           AGE
+	cars         10.128.2.9:8000                                     43h
+	discounts    10.131.0.8:8000                                     43h
+	flights      10.128.2.26:8000                                    43h
+	hotels       10.131.0.19:8000                                    43h
+	insurances   10.128.2.15:8000                                    43h
+	mysqldb      10.128.2.27:3306                                    43h
+	travels      10.128.2.13:8000,10.131.0.10:8000,10.131.0.9:8000   43h
 
-$ oc get endpoints -n travel-portal
-NAME      ENDPOINTS          AGE
-travels   10.128.2.8:8000    43h
-viaggi    10.128.2.25:8000   43h
-voyages   10.128.2.24:8000   43h
-$ /home/stkousso/Stelios/sw11/PAAS/Cloud-Tooling/ISTIO/ISTIO-Tooling/istioctl-1.11.3/istioctl proxy-config route control-5fcd7bb48d-m7dpl
-NAME                                                           DOMAINS                                                                                                    MATCH                  VIRTUAL SERVICE
-80                                                             istio-egressgateway.istio-system, istio-egressgateway.istio-system.svc.cluster + 1 more...                 /*                     
-80                                                             istio-ingressgateway.istio-system, istio-ingressgateway.istio-system.svc.cluster + 1 more...               /*                     
-3000                                                           grafana.istio-system, grafana.istio-system.svc.cluster + 1 more...                                         /*                     
-8000                                                           cars.travel-agency, cars.travel-agency.svc.cluster + 1 more...                                             /*                     
-8000                                                           discounts.travel-agency, discounts.travel-agency.svc.cluster + 1 more...                                   /*                     
-8000                                                           flights.travel-agency, flights.travel-agency.svc.cluster + 1 more...                                       /*                     
-8000                                                           hotels.travel-agency, hotels.travel-agency.svc.cluster + 1 more...                                         /*                     
-8000                                                           insurances.travel-agency, insurances.travel-agency.svc.cluster + 1 more...                                 /*                     
-8000                                                           travels.travel-agency, travels.travel-agency.svc.cluster + 1 more...                                       /*                     
-8000                                                           travels.travel-portal, travels.travel-portal.svc.cluster + 1 more...                                       /*                     
-8000                                                           viaggi.travel-portal, viaggi.travel-portal.svc.cluster + 1 more...                                         /*                     
-8000                                                           voyages.travel-portal, voyages.travel-portal.svc.cluster + 1 more...                                       /*                     
-8080                                                           control, control.travel-control.svc.cluster + 2 more...                                                    /*                     
-8080                                                           getting-started.demo-a-1, getting-started.demo-a-1.svc.cluster + 1 more...                                 /*                     
-9090                                                           kiali.istio-system, kiali.istio-system.svc.cluster + 1 more...                                             /*                     
-9090                                                           prometheus.istio-system, prometheus.istio-system.svc.cluster + 1 more...                                   /*                     
-9411                                                           jaeger-collector-headless.istio-system, jaeger-collector-headless.istio-system.svc.cluster + 2 more...     /*                     
-9411                                                           jaeger-collector.istio-system, jaeger-collector.istio-system.svc.cluster + 1 more...                       /*                     
-14250                                                          jaeger-collector-headless.istio-system, jaeger-collector-headless.istio-system.svc.cluster + 2 more...     /*                     
-14250                                                          jaeger-collector.istio-system, jaeger-collector.istio-system.svc.cluster + 1 more...                       /*                     
-                                                               *                                                                                                          /stats/prometheus*     
-inbound|8080|http|control.travel-control.svc.cluster.local     *                                                                                                          /*                     
-inbound|8080|http|control.travel-control.svc.cluster.local     *                                                                                                          /*                     
-inbound|8080|http|control.travel-control.svc.cluster.local     *                                                                                                          /*                     
-inbound|8080|http|control.travel-control.svc.cluster.local     *                                                                                                          /*                     
-14268                                                          jaeger-collector-headless.istio-system, jaeger-collector-headless.istio-system.svc.cluster + 2 more...     /*                     
-14268                                                          jaeger-collector.istio-system, jaeger-collector.istio-system.svc.cluster + 1 more...                       /*                     
-15010                                                          istiod-basic.istio-system, istiod-basic.istio-system.svc.cluster + 1 more...                               /*                     
-15014                                                          istiod-basic.istio-system, istiod-basic.istio-system.svc.cluster + 1 more...                               /*                     
-                                                               *                                                                                                          /healthz/ready
+	$ oc get endpoints -n travel-portal
+	NAME      ENDPOINTS          AGE
+	travels   10.128.2.8:8000    43h
+	viaggi    10.128.2.25:8000   43h
+	voyages   10.128.2.24:8000   43h
+
+	$ istioctl proxy-config route control-5fcd7bb48d-m7dpl
+	NAME                                                           DOMAINS                                                                                                    MATCH                  VIRTUAL SERVICE
+	80                                                             istio-egressgateway.istio-system, istio-egressgateway.istio-system.svc.cluster + 1 more...                 /*                     
+	80                                                             istio-ingressgateway.istio-system, istio-ingressgateway.istio-system.svc.cluster + 1 more...               /*                     
+	3000                                                           grafana.istio-system, grafana.istio-system.svc.cluster + 1 more...                                         /*                     
+	8000                                                           cars.travel-agency, cars.travel-agency.svc.cluster + 1 more...                                             /*                     
+	8000                                                           discounts.travel-agency, discounts.travel-agency.svc.cluster + 1 more...                                   /*                     
+	8000                                                           flights.travel-agency, flights.travel-agency.svc.cluster + 1 more...                                       /*                     
+	8000                                                           hotels.travel-agency, hotels.travel-agency.svc.cluster + 1 more...                                         /*                     
+	8000                                                           insurances.travel-agency, insurances.travel-agency.svc.cluster + 1 more...                                 /*                     
+	8000                                                           travels.travel-agency, travels.travel-agency.svc.cluster + 1 more...                                       /*                     
+	8000                                                           travels.travel-portal, travels.travel-portal.svc.cluster + 1 more...                                       /*                     
+	8000                                                           viaggi.travel-portal, viaggi.travel-portal.svc.cluster + 1 more...                                         /*                     
+	8000                                                           voyages.travel-portal, voyages.travel-portal.svc.cluster + 1 more...                                       /*                     
+	8080                                                           control, control.travel-control.svc.cluster + 2 more...                                                    /*                     
+	8080                                                           getting-started.demo-a-1, getting-started.demo-a-1.svc.cluster + 1 more...                                 /*                     
+	9090                                                           kiali.istio-system, kiali.istio-system.svc.cluster + 1 more...                                             /*                     
+	9090                                                           prometheus.istio-system, prometheus.istio-system.svc.cluster + 1 more...                                   /*                     
+	9411                                                           jaeger-collector-headless.istio-system, jaeger-collector-headless.istio-system.svc.cluster + 2 more...     /*                     
+	9411                                                           jaeger-collector.istio-system, jaeger-collector.istio-system.svc.cluster + 1 more...                       /*                     
+	14250                                                          jaeger-collector-headless.istio-system, jaeger-collector-headless.istio-system.svc.cluster + 2 more...     /*                     
+	14250                                                          jaeger-collector.istio-system, jaeger-collector.istio-system.svc.cluster + 1 more...                       /*                     
+		                                                       *                                                                                                          /stats/prometheus*     
+	inbound|8080|http|control.travel-control.svc.cluster.local     *                                                                                                          /*                     
+	inbound|8080|http|control.travel-control.svc.cluster.local     *                                                                                                          /*                     
+	inbound|8080|http|control.travel-control.svc.cluster.local     *                                                                                                          /*                     
+	inbound|8080|http|control.travel-control.svc.cluster.local     *                                                                                                          /*                     
+	14268                                                          jaeger-collector-headless.istio-system, jaeger-collector-headless.istio-system.svc.cluster + 2 more...     /*                     
+	14268                                                          jaeger-collector.istio-system, jaeger-collector.istio-system.svc.cluster + 1 more...                       /*                     
+	15010                                                          istiod-basic.istio-system, istiod-basic.istio-system.svc.cluster + 1 more...                               /*                     
+	15014                                                          istiod-basic.istio-system, istiod-basic.istio-system.svc.cluster + 1 more...                               /*                     
+		                                                       *                                                                                                          /healthz/ready
 
 
 
