@@ -303,37 +303,36 @@ image::./images/4-tolerations-validations.png[700,700]
 	oc logs -f <istio-operator POD> -n openshift-operators
 
 ** Check conditions below
-
++
 image::./images/5-operator-pod-condition.png[700,700]
-
++
 * Check State of Service Mesh KIALI operator POD
 ** _kiali-operator_ POD in openshift-operators namespace
 
 	oc logs -f <kiali-operator POD> -n openshift-operators
 
 ** Check conditions below
-
++
 image::./images/6-kiali-operator-pod-condition.png[700,700]
-
-
++
 * Check State of Service Mesh Jaeger operator POD
 ** _jaeger-operator_ POD in openshift-operators namespace
 
 	oc logs -f <jaeger-operator POD> -n openshift-operators
 
 ** Check conditions below
-
++
 image::./images/7-jaeger-operator-pod-condition.png[700,700]
-
++
 * Check State of Service Mesh ElasticSearch operator POD
 ** _elasticseacrch-operator_ POD in openshift-operators-redhat namespace
 
 	oc logs -f <elasticsearch-operator POD> -n openshift-operators-redhat
 
 ** Check conditions below
-
++
 image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
-
++
 * Check State of Service Mesh operator istio-node PODs
 
 	istio-node POD in openshift-operators namespace
