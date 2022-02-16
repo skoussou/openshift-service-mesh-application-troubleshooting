@@ -3,34 +3,23 @@
 
 == Tool Prerequisites
 
-====
-[cols="3*^",options="header"]
-|===
-|Tool
-|Purpose
-|Where To Get it From
+=== oc 
+CLI to interact with OCP Cluster
+image::./images/1-ocp-tools.jpeg[400,400]
 
+=== kubectl
+CLI to interact with OCP Cluster can be downloaded from link:https://kubernetes.io/docs/tasks/tools/#kubectl[Download kubctl]
 
-| oc
-| CLI to interact with OCP Cluster
-|image::./images/1-ocp-tools.jpeg[400,400]
+=== istioctl
+CLI to interact with Service Mesh sidecar (Envoy Proxy). Can be downloaded from and setup:
 
-| kubectl
-| CLI to interact with OCP Cluster
-| link:https://kubernetes.io/docs/tasks/tools/#kubectl[Download kubctl]
+	wget https://github.com/istio/istio/releases/download/1.6.14/istioctl-1.6.14-linux-amd64.tar.gz
+	tar xzf istioctl-1.6.14-linux-amd64.tar.gz
 
-| istioctl
-| CLI to interact with Envoy Proxy
-| wget https://github.com/istio/istio/releases/download/1.6.14/istioctl-1.6.14-linux-amd64.tar.gz
+=== jq
 
-tar xzf istioctl-1.6.14-linux-amd64.tar.gz
+"jq" command useful for transformations that are too complex for jsonpath.| Download at https://stedolan.github.io/jq/
 
-| jq
-| "jq" command useful for transformations that are too complex for jsonpath
-| Download at https://stedolan.github.io/jq/
-
-|===
-====
 
 
 
