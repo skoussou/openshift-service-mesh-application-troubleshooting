@@ -281,16 +281,18 @@ image::./images/2-tolerations-validations.png[700,700]
 * Understand the configuration based on the description of the link:https://access.redhat.com/documentation/en-us/openshift_container_platform/4.9/html-single/service_mesh/index#ossm-reference[OSSM Reference] and link:https://github.com/maistra/istio-operator/blob/maistra-2.0/docs/crd/CRDS.adoc[OSSM CRDs]
 
 === Service Mesh Certificates 
-Check via KIALI the security settings for the SMCP (mtls)
-Check from Service Mesh Control Plane State the configurations around certificates handling in this service mesh
-Understand Service Mesh Control Plane Security Settings (note: by default SM handles creation/rotation of certs for MTLs within the mesh only. Inbound/Outbound mTLS requires further config in Gateway/DestinationRule/ServiceEntry configurations, see also Service Mesh External (in/out) Network Configurations as well ensuring clients/service certificates are signed by the same authority)
+* Check via link:https://kiali.io/docs/features/security/[KIALI the security settings for the SMCP (mtls)]
+* Check from xref:anchor-1[Service Mesh Control Plane State] the configurations around certificates handling in this service mesh
+* Understand link:https://docs.openshift.com/container-platform/4.6/service_mesh/v2x/ossm-security.html[Service Mesh Control Plane Security Settings] (note: by default SM handles creation/rotation of certs for MTLs within the mesh only. Inbound/Outbound mTLS requires further config in `Gateway`/`DestinationRule`/`ServiceEntry` configurations, see also xref:anchor-2[Service Mesh External (in/out) Network Configurations] as well ensuring clients/service certificates are signed by the same authority)
 
+[[anchor-2]]
 === Service Mesh External (in/out) Network Configurations
 Calls to external Services ONLY allowed if ServiceEntry is defined for that endpoint and calls go through the Egress Gateway
 See Appendix B: Service Mesh external traffic directed via Egress Gateway
 Service Mesh Gateway Resource and VirtualService is configured to allow external access to service in the mesh
 See Appendix C: Service Mesh external traffic directed to mesh included service
 
+[[anchor-1]]
 === Service Mesh Operator State
 Check State of Service Mesh operator POD 
 
