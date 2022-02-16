@@ -171,7 +171,7 @@ Check Internal Registry connectivity
 	   limits.memory: 2Gi
 
 
-* LimitRange sets resource usage limits for each kind of resource in a Namespace and can be found in OCP Console <CONSOLE-URL>/k8s/ns/openshift-machine-api/limitranges
+* LimitRange sets resource usage limits for each kind of resource in a Namespace and can be found in OCP Console `<CONSOLE-URL>/k8s/ns/openshift-machine-api/limitranges`
 
 	apiVersion: v1
 	kind: LimitRange
@@ -213,7 +213,7 @@ Check Internal Registry connectivity
 
 === Selectors Validation
 
-image::./images/2-tolerations-validations.png[400,400]
+image::./images/2-tolerations-validations.png[700,700]
 
 
 
