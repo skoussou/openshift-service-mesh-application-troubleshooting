@@ -246,26 +246,39 @@ image::./images/2-tolerations-validations.png[700,700]
 	./istioctl proxy-config log my-app.my-app-project -r (resetting istio-proxy Log Levels)
 
 === POD is in the Service Mesh
-Does the POD have a istio-proxy sidecar?
-oc get pod/<pod-name> -o jsonpath='{.spec.containers[*].name}{"\n"}'
-Has the POD been instructed with annotation sidecar.istio.io/inject": "true" to have a istio-proxy sidecar?
-oc get pod/<pod-name> --output=jsonpath={.metadata.annotations}
-Is the project/namespace in the service mesh?
-What is a ServiceMeshMemberRole and how do I view it? The ServiceMeshMemberRole (smmr) defines the namespaces that a service mesh control plane monitors. The smmr lives in the istio-system namespace and should be named default. The smmr can be viewed a few different ways. The general method is:
-oc get smmr default -n istio-system -o yaml
-Overriding Network Policies
-Check if any unexpected NetworkPolicy configurations exist in the namespace the POD belongs to. 
-allow-from-all-namespaces and allow-from-ingress-namespace are installed by default in every namespace when using OpenShift SDN mode. The policies allow traffic between all pods in all namespaces, as well as ingress to pods through the router
-istio-mesh and istio-expose-route are created when adding the namespace to the service mesh.
-Test Connectivity between services
-If possible oc rsh <pod-name>
-curl <service-name>:<port> per VirtualService settings
+* Does the POD have a `istio-proxy` sidecar?
+	
+	oc get pod/<pod-name> -o jsonpath='{.spec.containers[*].name}{"\n"}'
+
+* Has the POD been instructed with annotation sidecar.istio.io/inject": "true" to have a istio-proxy sidecar?
+	
+	oc get pod/<pod-name> --output=jsonpath={.metadata.annotations}
+
+* Is the project/namespace in the service mesh?
+** What is a `ServiceMeshMemberRole` and how do I view it? 
+*** The `ServiceMeshMemberRole (smmr)` resource defines the namespaces that a service mesh control plane monitors. The `smmr` lives in the `istio-system` namespace and should be named default. The smmr can be viewed a few different ways. The general method is:
+
+	oc get smmr default -n istio-system -o yaml
+
+* Overriding Network Policies
+** Check if any unexpected `NetworkPolicy` configurations exist in the namespace the POD belongs to. 
+*** `allow-from-all-namespaces` and `allow-from-ingress-namespace` are installed by default in every namespace when using OpenShift SDN mode. The policies allow traffic between all pods in all namespaces, as well as ingress to pods through the router
+*** `istio-mesh` and `istio-expose-route` are created when adding the namespace to the service mesh.
+
+* Test Connectivity between services
+** If possible 
+
+	oc rsh <pod-name>
+	curl <service-name>:<port> (per VirtualService settings)
 
 === Service Mesh Control Plane configuration
-Get the details of the SMCP configuration
-oc get smcp -n istio-system
-oc get smcp <smcp-name> -n istio-system -o yaml
-Understand the configuration based on the description of the OSSM Reference and https://github.com/maistra/istio-operator/blob/maistra-2.0/docs/crd/CRDS.adoc
+
+* Get the details of the SMCP configuration
+
+	oc get smcp -n istio-system
+	oc get smcp <smcp-name> -n istio-system -o yaml
+
+* Understand the configuration based on the description of the link:https://access.redhat.com/documentation/en-us/openshift_container_platform/4.9/html-single/service_mesh/index#ossm-reference[OSSM Reference] and link:https://github.com/maistra/istio-operator/blob/maistra-2.0/docs/crd/CRDS.adoc[OSSM CRDs]
 
 === Service Mesh Certificates 
 Check via KIALI the security settings for the SMCP (mtls)
