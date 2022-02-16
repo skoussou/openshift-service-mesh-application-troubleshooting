@@ -9,7 +9,7 @@
 |Troubleshoot Focus Areas
 |How to Troubleshoot
 
-|*Cause 1: Failed Connections*[[failed_connections]]
+|*Cause 1: Failed Connections*
 |
 |
 
@@ -32,9 +32,9 @@
 | 
 | b) Calling service is not in service mesh but called service is in the Service Mesh continuously restarts]
 |
-* link:./CLUSTER-HEALTH.adoc[Application POD does not start or] 
+- link:./CLUSTER-HEALTH.adoc[Application POD does not start or] 
 
-* link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+- link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
 |
 | c) Calling service is part of a different Service Mesh than called service  
@@ -52,7 +52,7 @@
 | f) Service Mesh envoy have the correct/up-to-date configurations
 | - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
-|*Cause 2: Slow Responses*[[slow_responses]]
+|*Cause 2: Slow Responses*
 |
 |
 
