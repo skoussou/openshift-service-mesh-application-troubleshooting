@@ -80,13 +80,10 @@ Check Internal Registry connectivity
 * Check ReplicaSet Details for the deployments
 
 
-----
+
 	for depname in $(oc get deployment --output=jsonpath={.items..metadata.name} -n <namespace-name>); do echo "=================== ${depname} ==================="; oc describe deployment/$depname |grep -A 20 "Conditions:"; done
-----
 
-|
 
-----
 	=================== greeter-00001-deployment ===================
 	Conditions:
 	  Type           Status  Reason
@@ -111,7 +108,7 @@ Check Internal Registry connectivity
 	  Normal  ScalingReplicaSet  9h (x7 over 16h)   deployment-controller  Scaled up replica set hello-00001-deployment-766d88749b to 1
 	  Normal  ScalingReplicaSet  41m (x5 over 89m)  deployment-controller  Scaled down replica set hello-00001-deployment-766d88749b to 0
 	  Normal  ScalingReplicaSet  41m (x5 over 89m)  deployment-controller  Scaled up replica set hello-00001-deployment-766d88749b to 1
-----
+
 
 
 * Check Replicas Current/Desired 
