@@ -250,7 +250,7 @@ image::./images/2-tolerations-validations.png[700,700]
 	
 	oc get pod/<pod-name> -o jsonpath='{.spec.containers[*].name}{"\n"}'
 
-* Has the POD been instructed with annotation sidecar.istio.io/inject": "true" to have a istio-proxy sidecar?
+* Has the POD been instructed with annotation `sidecar.istio.io/inject": "true"` to have a `istio-proxy` sidecar?
 	
 	oc get pod/<pod-name> --output=jsonpath={.metadata.annotations}
 
