@@ -580,7 +580,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 ** link:https://istio.io/latest/docs/tasks/observability/kiali/#viewing-and-editing-istio-configuration-yaml[See some possible errors configuration errors uncovered by KIALI]
 * Access link:https://docs.openshift.com/container-platform/4.9/service_mesh/v2x/ossm-troubleshooting-istio.html#ossm-accessing-jaeger-console_troubleshooting-ossm[Jaeger Console]
 
-== D.4 Application
+== 4 - Application
 
 === Application Logs
 
@@ -668,6 +668,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 	$ oc adm must-gather --image=registry.redhat.io/openshift-service-mesh/istio-must-gather-rhel8
 
 ** To collect Red Hat OpenShift Service Mesh data for a specific control plane namespace with must-gather, you must specify the Red Hat OpenShift Service Mesh image and namespace. In this example, replace <namespace> with your control plane namespace, such as istio-system.
+
 	$ oc adm must-gather --image=registry.redhat.io/openshift-service-mesh/istio-must-gather-rhel8 gather <namespace>
 
 ** Known Issues to check 
