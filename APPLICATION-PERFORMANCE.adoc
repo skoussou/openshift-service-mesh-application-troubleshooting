@@ -15,26 +15,26 @@
 
 |Mutual TLS failures
 | a) Client/Service Mesh certificates configurations (Service Mesh GateWay)
-|* link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
 |
 | b) Service Mesh ServiceEntry certificates configuration
-|* link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
 |Authorisation failures
 |
-|* link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
 |Network issues
 | a) Calling service is deployed in an OCP worker node or OCP cluster which does not have access to the node/cluster where the called service POD is deployed
-|* link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
 | 
 | b) Calling service is not in service mesh but called service is in the Service Mesh continuously restarts]
-|* link:./CLUSTER-HEALTH.adoc[Application POD does not start or
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or ] - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
 |1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts] 
 |
 
 |1
