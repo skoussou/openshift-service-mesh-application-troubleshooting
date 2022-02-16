@@ -5,7 +5,7 @@
 
 === oc 
 CLI to interact with OCP Cluster
-image::./images/1-ocp-tools.jpeg[400,400]
+image::./images/1-ocp-tools.png[400,400]
 
 === kubectl
 CLI to interact with OCP Cluster can be downloaded from link:https://kubernetes.io/docs/tasks/tools/#kubectl[Download kubctl]
