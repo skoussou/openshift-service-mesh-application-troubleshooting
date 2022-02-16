@@ -76,6 +76,7 @@ Check Internal Registry connectivity
 
 == 2 - Openshift Deployments Actions
 
+[[anchor-5]]
 === POD Replicas Desired/Created
 
 * Check ReplicaSet Details for the deployments
@@ -198,7 +199,7 @@ Check Internal Registry connectivity
 
 	oc get $(oc describe pod/<pod-name>  |grep -A 0 "Controlled By" |sed 's/^[^/]*://g';) --output=jsonpath={.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms} |jq
 
-
+[[anchor-6]]
 === POD Defined Tolerations
 
 * Read documentation on link:https://docs.openshift.com/container-platform/4.9/nodes/scheduling/nodes-scheduler-taints-tolerations.html[Controlling pod placement using node taints]
@@ -354,93 +355,99 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 
 
 === Service Mesh Control Plane State
-See Service Mesh Control Plane Troubleshooting documentation
-State of Service Mesh control plane components and SMCP
-PODs for Operator before creation of SMCP
-oc get pods 
-NAME                                    READY   STATUS    RESTARTS   AGE
-grafana-664f58cb66-88wsn                2/2     Running   0          9m9s
-istio-egressgateway-55dbb59cb4-ldh2r    1/1     Running   0          9m9s
-istio-ingressgateway-565585584f-pppxr   1/1     Running   0          9m10s
-istiod-basic-5979b9565d-bg648           1/1     Running   0          9m58s
-jaeger-fd86c74d7-p4jqt                  2/2     Running   0          9m10s
-kiali-64568bb97d-stht7                  1/1     Running   0          8m32s
-prometheus-75875684bb-kn7t6             3/3     Running   0          9m39s
-Components Status
-oc get smcp -n istio-system
-NAME    READY   STATUS            PROFILES      VERSION   AGE
-basic   9/9     ComponentsReady   ["default"]   2.0.7.1   15m
-SMCP Deployments after SMCP creation
-oc get deployments -n istio-system
-NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
-grafana                1/1     1            1           16m
-istio-egressgateway    1/1     1            1           16m
-istio-ingressgateway   1/1     1            1           16m
-istiod-basic           1/1     1            1           17m
-jaeger                 1/1     1            1           16m
-kiali                  1/1     1            1           15m
-prometheus             1/1     1            1           16m
-PODs for Operator before creation After SMCP
-oc get pods -n istio-system
-NAME                                    READY   STATUS    RESTARTS   AGE
-grafana-664f58cb66-88wsn                2/2     Running   0          16m
-istio-egressgateway-55dbb59cb4-ldh2r    1/1     Running   0          16m
-istio-ingressgateway-565585584f-pppxr   1/1     Running   0          16m
-istiod-basic-5979b9565d-bg648           1/1     Running   0          17m
-jaeger-fd86c74d7-p4jqt                  2/2     Running   0          16m
-kiali-64568bb97d-stht7                  1/1     Running   0          16m
-prometheus-75875684bb-kn7t6             3/3     Running   0          17m
+
+* See link:https://docs.openshift.com/container-platform/4.9/service_mesh/v2x/ossm-troubleshooting-istio.html#troubleshooting-the-control-plane[Service Mesh Control Plane Troubleshooting documentation]
+* State of Service Mesh control plane components and SMCP
+**PODs for Operator before creation of SMCP
+
+	oc get pods 
+	NAME                                    READY   STATUS    RESTARTS   AGE
+	grafana-664f58cb66-88wsn                2/2     Running   0          9m9s
+	istio-egressgateway-55dbb59cb4-ldh2r    1/1     Running   0          9m9s
+	istio-ingressgateway-565585584f-pppxr   1/1     Running   0          9m10s
+	istiod-basic-5979b9565d-bg648           1/1     Running   0          9m58s
+	jaeger-fd86c74d7-p4jqt                  2/2     Running   0          9m10s
+	kiali-64568bb97d-stht7                  1/1     Running   0          8m32s
+	prometheus-75875684bb-kn7t6             3/3     Running   0          9m39s
+	Components Status
+	oc get smcp -n istio-system
+	NAME    READY   STATUS            PROFILES      VERSION   AGE
+	basic   9/9     ComponentsReady   ["default"]   2.0.7.1   15m
+	SMCP Deployments after SMCP creation
+	oc get deployments -n istio-system
+	NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
+	grafana                1/1     1            1           16m
+	istio-egressgateway    1/1     1            1           16m
+	istio-ingressgateway   1/1     1            1           16m
+	istiod-basic           1/1     1            1           17m
+	jaeger                 1/1     1            1           16m
+	kiali                  1/1     1            1           15m
+	prometheus             1/1     1            1           16m
+
+** PODs for Operator before creation After SMCP
+
+	oc get pods -n istio-system
+	NAME                                    READY   STATUS    RESTARTS   AGE
+	grafana-664f58cb66-88wsn                2/2     Running   0          16m
+	istio-egressgateway-55dbb59cb4-ldh2r    1/1     Running   0          16m
+	istio-ingressgateway-565585584f-pppxr   1/1     Running   0          16m
+	istiod-basic-5979b9565d-bg648           1/1     Running   0          17m
+	jaeger-fd86c74d7-p4jqt                  2/2     Running   0          16m
+	kiali-64568bb97d-stht7                  1/1     Running   0          16m
+	prometheus-75875684bb-kn7t6             3/3     Running   0          17m
 
 
-All PODs
-Check for any potential failures, restarts etc. and that number of components match SMCP configurations. Also check that resources/replicas for control plane components are sufficient (POD Resources Usage)
-oc get pods -n istio-system
+* All PODs
+** Check for any potential failures, restarts etc. and that number of components match SMCP configurations. Also check that resources/replicas for control plane components are sufficient (POD Resources Usage)
 
-NAME                                                     READY   STATUS      RESTARTS   AGE
-elasticsearch-cdm-istiosystemjaeger-1-699f45754c-ksvrk   2/2     Running     0          101d
-elasticsearch-cdm-istiosystemjaeger-2-6b79b7fbd8-fkgxf   2/2     Running     0          101d
-elasticsearch-cdm-istiosystemjaeger-3-7c976dbfc7-kn7fj   2/2     Running     0          101d
-grafana-7cdb68c698-89jvx                                 2/2     Running     0          101d
-istio-egressgateway-7d56f94695-57th6                     1/1     Running     0          31d
-istio-egressgateway-7d56f94695-c7k9x                     1/1     Running     0          95d
-istio-egressgateway-7d56f94695-kmk5p                     1/1     Running     0          76d
-istio-egressgateway-7d56f94695-lfrcd                     1/1     Running     0          95d
-istio-egressgateway-7d56f94695-n7f6w                     1/1     Running     0          95d
-istio-egressgateway-7d56f94695-z2pxs                     1/1     Running     0          95d
-istio-ingressgateway-766bbd5894-2mrms                    1/1     Running     0          34d
-istio-ingressgateway-766bbd5894-55hsf                    1/1     Running     0          95d
-istio-ingressgateway-766bbd5894-mmbbh                    1/1     Running     0          95d
-istio-ingressgateway-766bbd5894-q8vdn                    1/1     Running     0          95d
-istio-ingressgateway-766bbd5894-qkq2k                    1/1     Running     0          92d
-istio-ingressgateway-766bbd5894-wtx52                    1/1     Running     0          95d
-istiod-basic-install-6dfdb6bd88-7qn9r                    1/1     Running     0          101d
-istiod-basic-install-6dfdb6bd88-dz77m                    1/1     Running     0          95d
-istiod-basic-install-6dfdb6bd88-sxcfk                    1/1     Running     0          101d
-jaeger-collector-845b76bdcc-54d9p                        1/1     Running     0          25h
-jaeger-collector-845b76bdcc-8p7bd                        1/1     Running     0          11h
-jaeger-collector-845b76bdcc-dpzrw                        1/1     Running     0          12h
-jaeger-collector-845b76bdcc-lgv5x                        1/1     Running     0          2m42s
-jaeger-collector-845b76bdcc-m5p6m                        1/1     Running     4          101d
-jaeger-es-index-cleaner-1642809300-hm45x                 0/1     Completed   0          2d11h
-jaeger-es-index-cleaner-1642895700-45cg6                 0/1     Completed   0          35h
-jaeger-es-index-cleaner-1642982100-pbfcs                 0/1     Completed   0          11h
-jaeger-query-68dc5cfc94-skwtp                            3/3     Running     4          101d
-kiali-58c7fc64c9-qc2ns                                   1/1     Running     0          89d
-prometheus-7fb9cfd5f4-t64fq                              2/2     Running     0          101d
+	oc get pods -n istio-system
+
+	NAME                                                     READY   STATUS      RESTARTS   AGE
+	elasticsearch-cdm-istiosystemjaeger-1-699f45754c-ksvrk   2/2     Running     0          101d
+	elasticsearch-cdm-istiosystemjaeger-2-6b79b7fbd8-fkgxf   2/2     Running     0          101d
+	elasticsearch-cdm-istiosystemjaeger-3-7c976dbfc7-kn7fj   2/2     Running     0          101d
+	grafana-7cdb68c698-89jvx                                 2/2     Running     0          101d
+	istio-egressgateway-7d56f94695-57th6                     1/1     Running     0          31d
+	istio-egressgateway-7d56f94695-c7k9x                     1/1     Running     0          95d
+	istio-egressgateway-7d56f94695-kmk5p                     1/1     Running     0          76d
+	istio-egressgateway-7d56f94695-lfrcd                     1/1     Running     0          95d
+	istio-egressgateway-7d56f94695-n7f6w                     1/1     Running     0          95d
+	istio-egressgateway-7d56f94695-z2pxs                     1/1     Running     0          95d
+	istio-ingressgateway-766bbd5894-2mrms                    1/1     Running     0          34d
+	istio-ingressgateway-766bbd5894-55hsf                    1/1     Running     0          95d
+	istio-ingressgateway-766bbd5894-mmbbh                    1/1     Running     0          95d
+	istio-ingressgateway-766bbd5894-q8vdn                    1/1     Running     0          95d
+	istio-ingressgateway-766bbd5894-qkq2k                    1/1     Running     0          92d
+	istio-ingressgateway-766bbd5894-wtx52                    1/1     Running     0          95d
+	istiod-basic-install-6dfdb6bd88-7qn9r                    1/1     Running     0          101d
+	istiod-basic-install-6dfdb6bd88-dz77m                    1/1     Running     0          95d
+	istiod-basic-install-6dfdb6bd88-sxcfk                    1/1     Running     0          101d
+	jaeger-collector-845b76bdcc-54d9p                        1/1     Running     0          25h
+	jaeger-collector-845b76bdcc-8p7bd                        1/1     Running     0          11h
+	jaeger-collector-845b76bdcc-dpzrw                        1/1     Running     0          12h
+	jaeger-collector-845b76bdcc-lgv5x                        1/1     Running     0          2m42s
+	jaeger-collector-845b76bdcc-m5p6m                        1/1     Running     4          101d
+	jaeger-es-index-cleaner-1642809300-hm45x                 0/1     Completed   0          2d11h
+	jaeger-es-index-cleaner-1642895700-45cg6                 0/1     Completed   0          35h
+	jaeger-es-index-cleaner-1642982100-pbfcs                 0/1     Completed   0          11h
+	jaeger-query-68dc5cfc94-skwtp                            3/3     Running     4          101d
+	kiali-58c7fc64c9-qc2ns                                   1/1     Running     0          89d
+	prometheus-7fb9cfd5f4-t64fq                              2/2     Running     0          101d
 
 
-Istiod POD
+* Istiod POD
 Check for any potential failures of the IstioD Service Mesh control plane component to distribute the configurations
-oc logs -f <istiod-basic-install> -n istio-system
+
+	oc logs -f <istiod-basic-install> -n istio-system
 
 Sometimes a restart of the POD can resolve issues
 
 
-Scaling
+* Scaling
 Check that Service Mesh components are scaled out based on SMCP configuration
 Apply debugging as per SMCP configuration investigation of
-POD Replicas Desired/Created
-POD Defined Tolerations
+** xref:anchor-5[POD Replicas Desired/Created]
+** xref:anchor-6[POD Defined Tolerations]
 
 === POD contains updated Service Mesh Configurations
 Retrieve differences between Service Mesh Envoys (istio-proxy, istio-ingress, istio-egress)  and Service Mesh control plan (Istiod PODs)
