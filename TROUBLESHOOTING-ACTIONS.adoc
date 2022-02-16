@@ -5,6 +5,7 @@
 
 === oc 
 CLI to interact with OCP Cluster
+
 image::./images/1-ocp-tools.png[400,1000]
 
 === kubectl
@@ -215,7 +216,9 @@ Check Internal Registry connectivity
 
 image::./images/2-tolerations-validations.png[700,700]
 
+image::./images/3-tolerations-validations.png[700,700]
 
+image::./images/4-tolerations-validations.png[700,700]
 
 == 3 - Service Mesh
 
@@ -294,14 +297,15 @@ image::./images/2-tolerations-validations.png[700,700]
 
 [[anchor-1]]
 === Service Mesh Operator State
-Check State of Service Mesh operator POD 
+* Check State of Service Mesh operator POD 
 
-istio-operator POD in openshift-operators namespace
-oc logs -f <istio-operator POD> -n openshift-operators
+* istio-operator POD in openshift-operators namespace
 
-Check conditions below
+	oc logs -f <istio-operator POD> -n openshift-operators
 
+* Check conditions below
 
+image::./images/5-operator-pod-condition.png[700,700]
 
 Check State of Service Mesh KIALI operator POD
 
