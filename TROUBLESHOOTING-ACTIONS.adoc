@@ -444,8 +444,10 @@ Sometimes a restart of the POD can resolve issues
 
 
 * Scaling
+
 Check that Service Mesh components are scaled out based on SMCP configuration
 Apply debugging as per SMCP configuration investigation of
+
 ** xref:anchor-5[POD Replicas Desired/Created]
 ** xref:anchor-6[POD Defined Tolerations]
 
