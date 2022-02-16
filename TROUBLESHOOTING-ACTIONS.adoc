@@ -13,7 +13,8 @@
 
 | oc
 | CLI to interact with OCP Cluster
-| image::./images/1-ocp-tools.jpeg[Diagram,role=center]
+| Download from
+a|image::./images/1-ocp-tools.jpeg[Diagram,role=center]
 
 | kubectl
 | CLI to interact with OCP Cluster
