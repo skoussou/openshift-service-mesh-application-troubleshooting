@@ -133,8 +133,10 @@ Check Internal Registry connectivity
 === PersistentVolume and PersitentVolumeClaim State
 
 * Check PVs and PVCs state and ensure Status for expected PV/PVC is “Bound”
-oc get pv -n <namespace>
-oc get pvc -n <namespace-name>
+
+	oc get pv -n <namespace>
+	oc get pvc -n <namespace-name>
+
 * link:https://docs.openshift.com/container-platform/4.7/virt/logging_events_monitoring/virt-diagnosing-datavolumes-using-events-and-conditions.html[Diagnosing data volumes using events and conditions]
 * Space left in PV (Best to check on overall storage availability)
   ** If ‘df’ exists in the POD
@@ -142,63 +144,76 @@ oc get pvc -n <namespace-name>
 	kubectl -n <namespace-name> exec <pod-name> -- df -h
       
 === StorageClass Availability & Configuration
-Check StorageClass exists, if default, VolumeBindingMode
-oc get StorageClass
-Check StorageClass characteristics
-oc describe StorageClass <storageclass-name>
+
+* Check StorageClass exists, if default, VolumeBindingMode
+
+	oc get StorageClass
+
+* Check StorageClass characteristics
+
+	oc describe StorageClass <storageclass-name>
 
 === Check Resource Quotas & Limit Ranges
-ResourceQuota sets aggregate quota restrictions enforced per namespace and can be found in OCP Console <CONSOLE-URL>/k8s/ns//openshift-machine-api/resourcequotas
-apiVersion: v1
-kind: ResourceQuota
-metadata:
- name: example
- namespace: cicd
-spec:
- hard:
-   pods: '4'
-   requests.cpu: '1'
-   requests.memory: 1Gi
-   limits.cpu: '2'
-   limits.memory: 2Gi
+
+* ResourceQuota sets aggregate quota restrictions enforced per namespace and can be found in OCP Console <CONSOLE-URL>/k8s/ns//openshift-machine-api/resourcequotas
+
+	apiVersion: v1
+	kind: ResourceQuota
+	metadata:
+	 name: example
+	 namespace: cicd
+	spec:
+	 hard:
+	   pods: '4'
+	   requests.cpu: '1'
+	   requests.memory: 1Gi
+	   limits.cpu: '2'
+	   limits.memory: 2Gi
 
 
-LimitRange sets resource usage limits for each kind of resource in a Namespace and can be found in OCP Console <CONSOLE-URL>/k8s/ns/openshift-machine-api/limitranges
-apiVersion: v1
-kind: LimitRange
-metadata:
- name: mem-limit-range
- namespace: cicd
-spec:
- limits:
-   - default:
-       memory: 512Mi
-     defaultRequest:
-       memory: 256Mi
-     type: Container
+* LimitRange sets resource usage limits for each kind of resource in a Namespace and can be found in OCP Console <CONSOLE-URL>/k8s/ns/openshift-machine-api/limitranges
+
+	apiVersion: v1
+	kind: LimitRange
+	metadata:
+	 name: mem-limit-range
+	 namespace: cicd
+	spec:
+	 limits:
+	   - default:
+	       memory: 512Mi
+	     defaultRequest:
+	       memory: 256Mi
+	     type: Container
 
 
 === POD Deployment Location
-Check the worker node service is deployed at
-oc get pod -o wide
-Check the WorkerNode the POD (Affinity) prefers to deploy on
-oc get $(oc describe pod/<pod-name>  |grep -A 0 "Controlled By" |sed 's/^[^/]*://g';) --output=jsonpath={.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms} |jq
+
+* Check the worker node service is deployed at
+
+	oc get pod -o wide
+
+* Check the WorkerNode the POD (Affinity) prefers to deploy on
+
+	oc get $(oc describe pod/<pod-name>  |grep -A 0 "Controlled By" |sed 's/^[^/]*://g';) --output=jsonpath={.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms} |jq
 
 
 === POD Defined Tolerations
-Read documentation on Controlling pod placement using node taints
-Check if POD defined toleration are matched
 
-oc describe pod istio-ingressgateway-766bbd5894-q8vdn |grep -A 3 "Tolerations:"
-Tolerations:     ien=false:NoExecute
-            node.kubernetes.io/memory-pressure:NoSchedule op=Exists
-            node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
-                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+* Read documentation on link:https://docs.openshift.com/container-platform/4.9/nodes/scheduling/nodes-scheduler-taints-tolerations.html[Controlling pod placement using node taints]
+* Check if POD defined toleration are matched
+
+	oc describe pod istio-ingressgateway-766bbd5894-q8vdn |grep -A 3 "Tolerations:"
+
+	Tolerations:     ien=false:NoExecute
+		         node.kubernetes.io/memory-pressure:NoSchedule op=Exists
+		         node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+		         node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
 
 
 === Selectors Validation
 
-
+image::./images/2-tolerations-validations.png[400,400]
 
 
 
