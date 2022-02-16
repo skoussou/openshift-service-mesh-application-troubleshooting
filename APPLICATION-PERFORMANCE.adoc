@@ -36,6 +36,8 @@
 
 * link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
+|===
+
 |1
 | - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts] 
 |
