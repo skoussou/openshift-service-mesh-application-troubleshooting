@@ -15,42 +15,45 @@
 
 |Mutual TLS failures
 | a) Client/Service Mesh certificates configurations (Service Mesh GateWay)
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-certificates[Check Service Mesh Certificates and Service Mesh Configs]
 
 |
 | b) Service Mesh ServiceEntry certificates configuration
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-certificates[Check Service Mesh Certificates and Service Mesh Configs]
 
 |Authorisation failures
 |
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-certificates[Check Service Mesh Security settings]
 
 |Network issues
 | a) Calling service is deployed in an OCP worker node or OCP cluster which does not have access to the node/cluster where the called service POD is deployed
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:[Check Node Calling/Called PODs Deployed and if CLUSTER n/w connectivity is available]
 
 | 
 | b) Calling service is not in service mesh but called service is in the Service Mesh continuously restarts]
 |
-- link:./CLUSTER-HEALTH.adoc[Application POD does not start or] 
+- link:[Check PODs are in the same Service Mesh]
 
-- link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+- link:[Check if service mesh configuration allows calls to external services]
 
 |
 | c) Calling service is part of a different Service Mesh than called service  
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts] 
+| - link:[Check PODs are in the same Service Mesh by comparing namespaces in the ServiceMeshMemberRoll]
 
 |
 | d) Service Mesh configuration of GateWay for that service does not exist or does not expose the service correctly (hostname etc.)
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:[Check Service Mesh Network Configurations allow access to services]
 
 |
 | e) OCP Route to service does not exist
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:[Check Service Mesh Network Configurations allow access to services]
 
 |
 | f) Service Mesh envoy have the correct/up-to-date configurations
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| 
+- link:[Check Service Mesh Operator State]
+
+- link:[Troubleshoot Service Mesh Configuration]
 
 |*Cause 2: Slow Responses*
 |
@@ -58,31 +61,47 @@
 
 |POD/Deployment resource configuration limits reached
 | a) CPU/RAM/Network/Persistence POD Limits
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| - link:[Check POD Containers Resources Usage]
 
 |POD numbers < replicas defined in Deployment
 | a) Deployment State
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts
+| - link:[POD Replicas Desired/Created]
 
 |
 | b) Resource Limits
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+| 
+- link:[Check if ResourceQuota applied on namespace affecting deployment]
+
+- link:[Check if LimitRange have been applied affecting deployment]
 
 |Restarting PODs
 | a) POD Restarts
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restar
+| 
+- link:[Check for constant/often restarts of the POD]
+
+- link:[Check POD & Cluster Events]
+
 
 |Application Configurations
 | a) Application Logging level
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restar
+| 
+- link:[Check if Application Logging Levels are too high] (INFO normal, DEBUG/TRACE too high for all containers)
+- link:[Check Logging Levels of Service Mesh Components ] (`istio-proxy` in case access logging set to ON and Level too high)
 
 |
 | b) Backed up requests towards failing/slow service
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts
+| 
+- link:[Check Application Logs]
+
+- link:[Validate Configurations/Errors with Service Mesh Observability]
+
 
 |
 | c) Retries towards failing/slow service
-| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts
+| 
+- link:[Check Application Logs]
+
+- link:[Validate Configurations/Errors with Service Mesh Observability]
 
 |===
 ====
