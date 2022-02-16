@@ -1,0 +1,23 @@
+= Troubleshooting Application in OpenShift and in a Service Mesh
+
+The aim of this repository is to gather guidance on how to troubleshoot platform, service mesh, deployment and application issues based on the known `symptoms of failure`
+
+
+.Reported Symptoms of Application failure
+====
+[cols="2*^",options="header"]
+|===
+|#
+|Symptom
+
+|1
+|Application POD does not start or continuously restarts
+
+|2
+|Application performance problem
+
+|3
+|Application functional problems
+
+|===
+====
