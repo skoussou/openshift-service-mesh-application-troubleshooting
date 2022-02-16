@@ -11,13 +11,13 @@ The aim of this repository is to gather guidance on how to troubleshoot platform
 |Symptom
 
 |1
-|Application POD does not start or continuously restarts
+|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
 |2
-|Application performance problem
+|link:./APPLICATION-PERFORMANCE.adoc[Application performance problems]
 
 |3
-|Application functional problems
+|link:./APPLICATION-FUNCTIONALITY.adoc[Application functional problemss]
 
 |===
 ====
