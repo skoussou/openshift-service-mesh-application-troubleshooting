@@ -113,11 +113,12 @@ Check Internal Registry connectivity
 
 * Check Replicas Current/Desired 
 
-for rc in $(for pname in $(oc get pods --output=jsonpath={.items..metadata.name} -n <namespace-name>); do oc describe pod/$pname  |grep -A 0 "Controlled By" |sed 's/^[^/]*://g'; done); do echo "=================== ${pname} ==================="; oc describe $rc |grep -A 0 "Replicas"; done
-=================== hello-00002-deployment-8594b88f7c-rqm87 ===================
-Replicas:       1 current / 1 desired
-=================== hello-00002-deployment-8594b88f7c-rqm87 ===================
-Replicas:       1 current / 1 desired
+	for rc in $(for pname in $(oc get pods --output=jsonpath={.items..metadata.name} -n <namespace-name>); do oc describe pod/$pname  |grep -A 0 "Controlled By" |sed 's/^[^/]*://g'; done); do echo "=================== ${pname} ==================="; oc describe $rc |grep -A 0 "Replicas"; done
+
+	=================== hello-00002-deployment-8594b88f7c-rqm87 ===================
+	Replicas:       1 current / 1 desired
+	=================== hello-00002-deployment-8594b88f7c-rqm87 ===================
+	Replicas:       1 current / 1 desired
 
 
 
