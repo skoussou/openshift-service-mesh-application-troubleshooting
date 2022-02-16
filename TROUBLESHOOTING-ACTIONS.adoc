@@ -581,93 +581,114 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 * Access link:https://docs.openshift.com/container-platform/4.9/service_mesh/v2x/ossm-troubleshooting-istio.html#ossm-accessing-jaeger-console_troubleshooting-ossm[Jaeger Console]
 
 == D.4 Application
-Application Logs
-Follow logs
-oc logs -f <pod-name>
-For all contains in POD
-oc logs -f <pod-name> --all-containers
-For single container in POD
-oc logs -f <pod-name> -c <container-name>
 
-POD Resources Usage
-Review resources used by a POD’s containers
-kubectl top pod <pod-name> --containers -n <namespace-name>
-POD                                       NAME             CPU(cores)   MEMORY(bytes)   
-hello-00002-deployment-8594b88f7c-rqm87   istio-proxy      3m           81Mi            
-hello-00002-deployment-8594b88f7c-rqm87   queue-proxy      1m           28Mi            
-hello-00002-deployment-8594b88f7c-rqm87   user-container   0m           6Mi 
+=== Application Logs
 
-Filter to only view Service Mesh side car istio-proxy container resources usage
-oc adm top pod --containers -A | grep istio-proxy | sort -rk6 [| tail -20]
-ees-app-test-ir3    webservice-rodb-postgres-5c8559446f-j69zq          istio-proxy    2m           80Mi            
-ees-app-test-ir3    webservice-rodb-data-provider-69bcc8c777-lmnsr     istio-proxy    3m           84Mi            
-ees-app-test-ir3    webservice-rodb-data-feeder-6975fd585b-wsz5q       istio-proxy    3m           87Mi            
-ees-app-test-ir3    vis-notification-consumer-848dc98f8b-2c2n9         istio-proxy    8m           86Mi            
-ees-app-test-ir3    transaction-log-indexer-64b969cfd-ckrbd            istio-proxy    2m           86Mi            
-ees-app-test-ir3    transaction-log-backup-transcriptor-0              istio-proxy    52m          93Mi            
-ees-app-test-ir3    sbms-notification-producer-0      	           istio-proxy    3m           87Mi            
-ees-app-test-ir3    saga-query-processor-8cb47c4c-2tqg9                istio-proxy    3m           84Mi  
+* Follow logs for issues
 
-View Memory Usage from single Service Mesh sidecar istio-proxy
-oc -n <namespace-name> rsh -Tc istio-proxy <pod-name> curl http://localhost:15000/memory
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0{
- "allocated": "127315048",
- "heap_size": "237395968",
- "pageheap_unmapped": "62611456",
- "pageheap_free": "4808704",
- "total_thread_cache": "23849416",
- "total_physical_bytes": "178192384"
-}
+	oc logs -f <pod-name>
 
-Defining memory for a sidecar
-For all sidecars in the Service Mesh
- proxy:
-   runtime:
-     container:
-       resources:
-         limits:
-           cpu: 500m
-           memory: 512M
-         requests:
-           cpu: 10m
-           memory: 128M
-For single sidecar in the Service Mesh in a  Deployment/DeploymentConfig
+* For all contains in POD
 
- metadata: 
-  annotations: 
-    sidecar.istio.io/inject: "true" 
-    sidecar.istio.io/proxyMemoryLimit: 512Mi
+	oc logs -f <pod-name> --all-containers
 
-Space left in PV (Best to check on overall storage availability)
-If ‘df’ exists in the POD
-kubectl -n <namespace-name> exec <pod-name> -- df -h
+* For single container in POD
+	
+	oc logs -f <pod-name> -c <container-name>
+
+=== POD Resources Usage
+* Review resources used by a POD’s containers
+
+	kubectl top pod <pod-name> --containers -n <namespace-name>
+	POD                                       NAME             CPU(cores)   MEMORY(bytes)   
+	hello-00002-deployment-8594b88f7c-rqm87   istio-proxy      3m           81Mi            
+	hello-00002-deployment-8594b88f7c-rqm87   queue-proxy      1m           28Mi            
+	hello-00002-deployment-8594b88f7c-rqm87   user-container   0m           6Mi 
+
+* Filter to only view Service Mesh side car istio-proxy container resources usage
+
+	oc adm top pod --containers -A | grep istio-proxy | sort -rk6 [| tail -20]
+	ees-app-test-ir3    webservice-rodb-postgres-5c8559446f-j69zq          istio-proxy    2m           80Mi            
+	ees-app-test-ir3    webservice-rodb-data-provider-69bcc8c777-lmnsr     istio-proxy    3m           84Mi            
+	ees-app-test-ir3    webservice-rodb-data-feeder-6975fd585b-wsz5q       istio-proxy    3m           87Mi            
+	ees-app-test-ir3    vis-notification-consumer-848dc98f8b-2c2n9         istio-proxy    8m           86Mi            
+	ees-app-test-ir3    transaction-log-indexer-64b969cfd-ckrbd            istio-proxy    2m           86Mi            
+	ees-app-test-ir3    transaction-log-backup-transcriptor-0              istio-proxy    52m          93Mi            
+	ees-app-test-ir3    sbms-notification-producer-0      	           istio-proxy    3m           87Mi            
+	ees-app-test-ir3    saga-query-processor-8cb47c4c-2tqg9                istio-proxy    3m           84Mi  
+
+* View Memory Usage from single Service Mesh sidecar istio-proxy
+
+	oc -n <namespace-name> rsh -Tc istio-proxy <pod-name> curl http://localhost:15000/memory
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+		                         Dload  Upload   Total   Spent    Left  Speed
+	  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0{
+	 "allocated": "127315048",
+	 "heap_size": "237395968",
+	 "pageheap_unmapped": "62611456",
+	 "pageheap_free": "4808704",
+	 "total_thread_cache": "23849416",
+	 "total_physical_bytes": "178192384"
+	}
+
+* Defining memory for a sidecar
+
+	For all sidecars in the Service Mesh
+	 proxy:
+	   runtime:
+	     container:
+	       resources:
+		 limits:
+		   cpu: 500m
+		   memory: 512M
+		 requests:
+		   cpu: 10m
+		   memory: 128M
+
+* For single sidecar in the Service Mesh in a  Deployment/DeploymentConfig
+
+	 metadata: 
+	  annotations: 
+	    sidecar.istio.io/inject: "true" 
+	    sidecar.istio.io/proxyMemoryLimit: 512Mi
+
+* Space left in PV (Best to check on overall storage availability)
+** If ‘df’ exists in the POD
+
+	kubectl -n <namespace-name> exec <pod-name> -- df -h
             
 
-== D.5 Support
-Collect Service Mesh data for a support case
-1.20.2.4. About collecting service mesh data 
-To collect Red Hat OpenShift Service Mesh data with must-gather, you must specify the Red Hat OpenShift Service Mesh image.
-$ oc adm must-gather --image=registry.redhat.io/openshift-service-mesh/istio-must-gather-rhel8
-To collect Red Hat OpenShift Service Mesh data for a specific control plane namespace with must-gather, you must specify the Red Hat OpenShift Service Mesh image and namespace. In this example, replace <namespace> with your control plane namespace, such as istio-system.
-$ oc adm must-gather --image=registry.redhat.io/openshift-service-mesh/istio-must-gather-rhel8 gather <namespace>
+== 5 - Support
 
-Before a support case - Known Issues to check 
-Istio problems and solutions
-Watch Out for This Istio Proxy Sidecar Memory Pitfall
+=== Collect Service Mesh data for a support case
 
+* link:https://access.redhat.com/documentation/en-us/openshift_container_platform/4.7/html-single/service_mesh#ossm-about-collecting-ossm-data_troubleshooting-ossm[About collecting service mesh data ]
+** To collect Red Hat OpenShift Service Mesh data with must-gather, you must specify the Red Hat OpenShift Service Mesh image.
 
+	$ oc adm must-gather --image=registry.redhat.io/openshift-service-mesh/istio-must-gather-rhel8
+
+** To collect Red Hat OpenShift Service Mesh data for a specific control plane namespace with must-gather, you must specify the Red Hat OpenShift Service Mesh image and namespace. In this example, replace <namespace> with your control plane namespace, such as istio-system.
+	$ oc adm must-gather --image=registry.redhat.io/openshift-service-mesh/istio-must-gather-rhel8 gather <namespace>
+
+** Known Issues to check 
+** link:https://istio.io/latest/docs/ops/common-problems/[Istio problems and solutions]
+** link:https://medium.com/geekculture/watch-out-for-this-istio-proxy-sidecar-memory-pitfall-8dbd99ea7e9d[Watch Out for This Istio Proxy Sidecar Memory Pitfall]
 
 
 
 
 
 == Appendix A: Visual States
-Nodes State Console View
 
+* Nodes State Console View
++
+image::./images/9-Nodes-State-View.png[700,700]
++
 
-Node Resources View
+* Node Resources View
++
+image::./images/10-Nodes-Resources-View.png[700,700]
++
 
 
 
