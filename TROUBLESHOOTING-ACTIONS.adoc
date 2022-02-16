@@ -298,60 +298,60 @@ image::./images/4-tolerations-validations.png[700,700]
 [[anchor-1]]
 === Service Mesh Operator State
 * Check State of Service Mesh operator POD 
-
-* istio-operator POD in openshift-operators namespace
+** _istio-operator_ POD in openshift-operators namespace
 
 	oc logs -f <istio-operator POD> -n openshift-operators
 
-* Check conditions below
+** Check conditions below
 
 image::./images/5-operator-pod-condition.png[700,700]
 
-Check State of Service Mesh KIALI operator POD
+* Check State of Service Mesh KIALI operator POD
+** _kiali-operator_ POD in openshift-operators namespace
 
-kiali-operator POD in openshift-operators namespace
-oc logs -f <kiali-operator POD> -n openshift-operators
+	oc logs -f <kiali-operator POD> -n openshift-operators
 
-Check conditions below
+** Check conditions below
 
-
-
-Check State of Service Mesh Jaeger operator POD
-
-jaeger-operator POD in openshift-operators namespace
-oc logs -f <jaeger-operator POD> -n openshift-operators
-
-Check conditions below
+image::./images/6-kiali-operator-pod-condition.png[700,700]
 
 
+* Check State of Service Mesh Jaeger operator POD
+** _jaeger-operator_ POD in openshift-operators namespace
 
-Check State of Service Mesh ElasticSearch operator POD
+	oc logs -f <jaeger-operator POD> -n openshift-operators
 
-elasticseacrch-operator POD in openshift-operators-redhat namespace
-oc logs -f <elasticsearch-operator POD> -n openshift-operators-redhat
+** Check conditions below
 
-Check conditions below
+image::./images/7-jaeger-operator-pod-condition.png[700,700]
 
+* Check State of Service Mesh ElasticSearch operator POD
+** _elasticseacrch-operator_ POD in openshift-operators-redhat namespace
 
+	oc logs -f <elasticsearch-operator POD> -n openshift-operators-redhat
 
-Check State of Service Mesh operator istio-node PODs
+** Check conditions below
 
-istio-node POD in openshift-operators namespace
-oc get pods |grep istio-node
-NAME                               READY   STATUS    RESTARTS   AGE
-istio-node-2nq92                   3/3     Running   0          207d
-istio-node-48mbj                   3/3     Running   0          207d
-istio-node-4fbfx                   3/3     Running   0          207d
-istio-node-5pdx7                   3/3     Running   0          207d
-istio-node-66vj8                   3/3     Running   0          207d
-istio-node-6nmgh                   3/3     Running   0          207d
-istio-node-7df6j                   3/3     Running   0          207d
-istio-node-8rhm4                   3/3     Running   0          207d
-istio-node-d8jvv                   3/3     Running   0          207d
-istio-node-dnhpv                   3/3     Running   0          207d
-istio-node-dvl5g                   3/3     Running   0          207d
-istio-node-fkg5f                   3/3     Running   0          207d
-istio-node-fwm9c                   3/3     Running   0          207d
+image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
+
+* Check State of Service Mesh operator istio-node PODs
+
+	istio-node POD in openshift-operators namespace
+	oc get pods |grep istio-node
+	NAME                               READY   STATUS    RESTARTS   AGE
+	istio-node-2nq92                   3/3     Running   0          207d
+	istio-node-48mbj                   3/3     Running   0          207d
+	istio-node-4fbfx                   3/3     Running   0          207d
+	istio-node-5pdx7                   3/3     Running   0          207d
+	istio-node-66vj8                   3/3     Running   0          207d
+	istio-node-6nmgh                   3/3     Running   0          207d
+	istio-node-7df6j                   3/3     Running   0          207d
+	istio-node-8rhm4                   3/3     Running   0          207d
+	istio-node-d8jvv                   3/3     Running   0          207d
+	istio-node-dnhpv                   3/3     Running   0          207d
+	istio-node-dvl5g                   3/3     Running   0          207d
+	istio-node-fkg5f                   3/3     Running   0          207d
+	istio-node-fwm9c                   3/3     Running   0          207d
 
 
 === Service Mesh Control Plane State
