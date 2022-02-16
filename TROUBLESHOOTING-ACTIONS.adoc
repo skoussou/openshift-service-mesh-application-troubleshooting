@@ -79,19 +79,13 @@ Check Internal Registry connectivity
 
 * Check ReplicaSet Details for the deployments
 
-====
-[cols="1*^",options="header"]
-|===
-|Commands/Output
 
-| 
-[source,ruby]
 ----
 	for depname in $(oc get deployment --output=jsonpath={.items..metadata.name} -n <namespace-name>); do echo "=================== ${depname} ==================="; oc describe deployment/$depname |grep -A 20 "Conditions:"; done
 ----
 
 |
-[source,ruby]
+
 ----
 	=================== greeter-00001-deployment ===================
 	Conditions:
@@ -119,8 +113,6 @@ Check Internal Registry connectivity
 	  Normal  ScalingReplicaSet  41m (x5 over 89m)  deployment-controller  Scaled up replica set hello-00001-deployment-766d88749b to 1
 ----
 
-|===
-====
 
 * Check Replicas Current/Desired 
 
