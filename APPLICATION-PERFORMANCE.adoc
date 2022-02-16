@@ -32,6 +32,7 @@
 | 
 | b) Calling service is not in service mesh but called service is in the Service Mesh continuously restarts]
 |- link:./CLUSTER-HEALTH.adoc[Application POD does not start or] 
+
 -  link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
 |1
