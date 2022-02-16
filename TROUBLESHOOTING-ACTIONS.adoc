@@ -24,7 +24,7 @@ CLI to interact with Service Mesh sidecar (Envoy Proxy). Can be downloaded from 
 
 
 
-== D.1 OpenShift Cluster Actions
+== 1 - OpenShift Cluster Actions
 
 === CPU & RAM Nodes Inspection
 * See all cluster nodes CPU and Memory requests and limits. See for visualisation
@@ -73,7 +73,7 @@ Check Internal Registry connectivity
 
 	curl -i https://default-route-openshift-image-registry.apps.<CLUSTER-DOMAIN>.com
 
-== D.2 Openshift Deployments Actions
+== 2 - Openshift Deployments Actions
 
 === POD Replicas Desired/Created
 
@@ -125,16 +125,21 @@ Check Internal Registry connectivity
 
 
 === POD Restarts
-POD Restarts for all pods (Taken from kubectl cheatsheet)
-oc get pods -A --sort-by='.status.containerStatuses[0].restartCount'
-PersistentVolume and PersitentVolumeClaim State
-Check PVs and PVCs state and ensure Status for expected PV/PVC is “Bound”
+
+* POD Restarts for all pods (Taken from kubectl cheatsheet)
+
+	oc get pods -A --sort-by='.status.containerStatuses[0].restartCount'
+
+=== PersistentVolume and PersitentVolumeClaim State
+
+* Check PVs and PVCs state and ensure Status for expected PV/PVC is “Bound”
 oc get pv -n <namespace>
 oc get pvc -n <namespace-name>
-Diagnosing data volumes using events and conditions     
-Space left in PV (Best to check on overall storage availability)
-If ‘df’ exists in the POD
-kubectl -n <namespace-name> exec <pod-name> -- df -h
+* link:https://docs.openshift.com/container-platform/4.7/virt/logging_events_monitoring/virt-diagnosing-datavolumes-using-events-and-conditions.html[Diagnosing data volumes using events and conditions]
+* Space left in PV (Best to check on overall storage availability)
+  ** If ‘df’ exists in the POD
+
+	kubectl -n <namespace-name> exec <pod-name> -- df -h
       
 === StorageClass Availability & Configuration
 Check StorageClass exists, if default, VolumeBindingMode
