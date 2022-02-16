@@ -5,7 +5,7 @@
 
 === oc 
 CLI to interact with OCP Cluster
-image::./images/1-ocp-tools.png[400,400]
+image::./images/1-ocp-tools.png[400,1000]
 
 === kubectl
 CLI to interact with OCP Cluster can be downloaded from link:https://kubernetes.io/docs/tasks/tools/#kubectl[Download kubctl]
@@ -18,7 +18,7 @@ CLI to interact with Service Mesh sidecar (Envoy Proxy). Can be downloaded from 
 
 === jq
 
-"jq" command useful for transformations that are too complex for jsonpath.| Download at https://stedolan.github.io/jq/
+*jq* command useful for transformations that are too complex for jsonpath.| Download at https://stedolan.github.io/jq/
 
 
 
@@ -217,28 +217,35 @@ image::./images/2-tolerations-validations.png[700,700]
 
 
 
-== D.3 Service Mesh
+== 3 - Service Mesh
 
-Check versions of Service Mesh Components
-Service Mesh Operator Version
-oc get deploy istio-operator -n openshift-operators -o yaml | grep 'olm.owner:'
-Service Mesh Control Plane Version
-oc get configmap/istio-basic -n istio-system -oyaml | awk -v n=2 '/apiVersion/{l++} l==n' | jq .metadata.labels.'"maistra-version"'
-Service Mesh Control Plane Ingress/Egress Envoy Version
-for dp in $(oc get deployments -n istio-system -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'); do
- if [[ $dp == istio-* ]]; then
- ver=$(oc -n istio-system get deploy ${dp} -o jsonpath='{ .metadata.labels.maistra-version }')
- echo "${dp} - ${ver}"
- fi
-done
+=== Check versions of Service Mesh Components
+* Service Mesh Operator Version
+	
+	oc get deploy istio-operator -n openshift-operators -o yaml | grep 'olm.owner:'
 
-Check & Set Logging Levels of Service Mesh Components
-Enabling Envoy access logs for the whole Service Mesh (ie. istio-proxy containers and ingress/egress gateways)
-How to change log level of specific components or protocols on the istio-proxy sidecar
-./istioctl proxy-config log my-app.my-app-project  (checking istio-proxy Log Levels)
-./istioctl proxy-config log my-app.my-app-project --level http2:debug,grpc:debug (setting istio-proxy Log Levels)
-./istioctl proxy-config log my-app.my-app-project -r (resetting istio-proxy Log Levels)
-POD is in the Service Mesh
+* Service Mesh Control Plane Version
+	
+	oc get configmap/istio-basic -n istio-system -oyaml | awk -v n=2 '/apiVersion/{l++} l==n' | jq .metadata.labels.'"maistra-version"'
+
+* Service Mesh Control Plane Ingress/Egress Envoy Version
+
+	for dp in $(oc get deployments -n istio-system -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'); do
+	 if [[ $dp == istio-* ]]; then
+	 ver=$(oc -n istio-system get deploy ${dp} -o jsonpath='{ .metadata.labels.maistra-version }')
+	 echo "${dp} - ${ver}"
+	 fi
+	done
+
+=== Check & Set Logging Levels of Service Mesh Components
+* link:https://access.redhat.com/documentation/en-us/openshift_container_platform/4.7/html-single/service_mesh/index#enabling-envoy-access-logs[Enabling Envoy access logs] for the whole Service Mesh (ie. `istio-proxy` containers and ingress/egress gateways)
+* link:https://access.redhat.com/solutions/6106461[How to change log level of specific components or protocols on the istio-proxy sidecar]
+
+	./istioctl proxy-config log my-app.my-app-project  (checking istio-proxy Log Levels)
+	./istioctl proxy-config log my-app.my-app-project --level http2:debug,grpc:debug (setting istio-proxy Log Levels)
+	./istioctl proxy-config log my-app.my-app-project -r (resetting istio-proxy Log Levels)
+
+=== POD is in the Service Mesh
 Does the POD have a istio-proxy sidecar?
 oc get pod/<pod-name> -o jsonpath='{.spec.containers[*].name}{"\n"}'
 Has the POD been instructed with annotation sidecar.istio.io/inject": "true" to have a istio-proxy sidecar?
@@ -253,21 +260,25 @@ istio-mesh and istio-expose-route are created when adding the namespace to the s
 Test Connectivity between services
 If possible oc rsh <pod-name>
 curl <service-name>:<port> per VirtualService settings
-Service Mesh Control Plane configuration
+
+=== Service Mesh Control Plane configuration
 Get the details of the SMCP configuration
 oc get smcp -n istio-system
 oc get smcp <smcp-name> -n istio-system -o yaml
 Understand the configuration based on the description of the OSSM Reference and https://github.com/maistra/istio-operator/blob/maistra-2.0/docs/crd/CRDS.adoc
-Service Mesh Certificates 
+
+=== Service Mesh Certificates 
 Check via KIALI the security settings for the SMCP (mtls)
 Check from Service Mesh Control Plane State the configurations around certificates handling in this service mesh
 Understand Service Mesh Control Plane Security Settings (note: by default SM handles creation/rotation of certs for MTLs within the mesh only. Inbound/Outbound mTLS requires further config in Gateway/DestinationRule/ServiceEntry configurations, see also Service Mesh External (in/out) Network Configurations as well ensuring clients/service certificates are signed by the same authority)
-Service Mesh External (in/out) Network Configurations
+
+=== Service Mesh External (in/out) Network Configurations
 Calls to external Services ONLY allowed if ServiceEntry is defined for that endpoint and calls go through the Egress Gateway
 See Appendix B: Service Mesh external traffic directed via Egress Gateway
 Service Mesh Gateway Resource and VirtualService is configured to allow external access to service in the mesh
 See Appendix C: Service Mesh external traffic directed to mesh included service
-Service Mesh Operator State
+
+=== Service Mesh Operator State
 Check State of Service Mesh operator POD 
 
 istio-operator POD in openshift-operators namespace
@@ -324,7 +335,7 @@ istio-node-fkg5f                   3/3     Running   0          207d
 istio-node-fwm9c                   3/3     Running   0          207d
 
 
-Service Mesh Control Plane State
+=== Service Mesh Control Plane State
 See Service Mesh Control Plane Troubleshooting documentation
 State of Service Mesh control plane components and SMCP
 PODs for Operator before creation of SMCP
@@ -413,7 +424,7 @@ Apply debugging as per SMCP configuration investigation of
 POD Replicas Desired/Created
 POD Defined Tolerations
 
-POD contains updated Service Mesh Configurations
+=== POD contains updated Service Mesh Configurations
 Retrieve differences between Service Mesh Envoys (istio-proxy, istio-ingress, istio-egress)  and Service Mesh control plan (Istiod PODs)
 /istioctl proxy-status -i <ISTO SMCP namespace-name> <pod-name> -n <namespace-name>
 Clusters Match
@@ -421,7 +432,7 @@ Listeners Match
 Routes Match (RDS last loaded at Wed, 27 Oct 2021 08:09:01 BST)
 
 
-Service Mesh (Deep Dive) Troubleshooting Actions - Envoy(istio-proxy)
+=== Service Mesh (Deep Dive) Troubleshooting Actions - Envoy(istio-proxy)
 Debug Service Mesh configurations (and their state). Required knowledge includes:
 Envoy Basics (clusters, listeners, routes, and filters as well as discovery services -xDs,LDS,CDS,RDS) Understanding
 
@@ -518,7 +529,8 @@ After the changes have been applied the same instruction would return:
 
 Follow Appendix D: Analyze Envoy Clusters Config
 How to debug your Istio networking configuration
-Service Mesh Observability
+
+=== Service Mesh Observability
 Access Kiali Console
 From the Namespace menu, select your application namespace, for example, bookinfo.
 To choose a different graph layout, do either or both of the following:
