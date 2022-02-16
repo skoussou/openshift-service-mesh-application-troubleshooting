@@ -24,32 +24,54 @@ CLI to interact with Service Mesh sidecar (Envoy Proxy). Can be downloaded from 
 
 
 
-D.1 OpenShift Cluster Actions
-CPU & RAM Nodes Inspection
-See all cluster nodes CPU and Memory requests and limits. See for visualisation
-oc describe nodes | grep -A 3 "Name:\|Resource .*Requests .*Limits" | grep -v "Roles:"
-See all cluster nodes load (top)
-kubectl top nodes
-Nodes, Machine Configs and States
-Check nodes and state (all should be in “Ready” state) see Nodes State Console View for visualization
-oc get node
-Check machineconfig and machine states
-oc get machineconfigpool
-Cluster Events
-Events for the whole cluster
-oc get events
-Events in a specific namespace
-oc get events -n <namespace-name>
-Events for a specific POD
-oc get event --namespace <namespace-name> --field-selector involvedObject.name=<pod-name>
-Cluster Router
-Check PODs for the Router are up and running
-oc -n openshift-ingress get deployment
-Internal Registry
-Check Internal Registry running
-oc -n openshift-image-registry get deployment
+== D.1 OpenShift Cluster Actions
+
+=== CPU & RAM Nodes Inspection
+* See all cluster nodes CPU and Memory requests and limits. See for visualisation
+
+	oc describe nodes | grep -A 3 "Name:\|Resource .*Requests .*Limits" | grep -v "Roles:"
+
+* See all cluster nodes load (top)
+
+	kubectl top nodes
+
+=== Nodes, Machine Configs and States
+* Check nodes and state (all should be in “Ready” state) see Nodes State Console View for visualization
+
+	oc get node
+
+* Check machineconfig and machine states
+
+	oc get machineconfigpool
+
+=== Cluster Events
+* Events for the whole cluster
+
+	oc get events
+
+* Events in a specific namespace
+	
+	oc get events -n <namespace-name>
+
+* Events for a specific POD
+
+	oc get event --namespace <namespace-name> --field-selector involvedObject.name=<pod-name>
+
+=== Cluster Router
+
+* Check PODs for the Router are up and running
+
+	oc -n openshift-ingress get deployment
+
+=== Internal Registry
+
+* Check Internal Registry running
+
+	oc -n openshift-image-registry get deployment
+
 Check Internal Registry connectivity
-curl -i https://default-route-openshift-image-registry.apps.<CLUSTER-DOMAIN>.com
+
+	curl -i https://default-route-openshift-image-registry.apps.<CLUSTER-DOMAIN>.com
 
 == D.2 Openshift Deployments Actions
 POD Replicas Desired/Created
