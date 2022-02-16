@@ -84,37 +84,37 @@ Check Internal Registry connectivity
 |Commands/Output
 
 |
-----
-for depname in $(oc get deployment --output=jsonpath={.items..metadata.name} -n <namespace-name>); do echo "=================== ${depname} ==================="; oc describe deployment/$depname |grep -A 20 "Conditions:"; done
-----
+
+	for depname in $(oc get deployment --output=jsonpath={.items..metadata.name} -n <namespace-name>); do echo "=================== ${depname} ==================="; oc describe deployment/$depname |grep -A 20 "Conditions:"; done
+
 
 |
-----
-=================== greeter-00001-deployment ===================
-Conditions:
-  Type           Status  Reason
-  ----           ------  ------
-  Progressing    True    NewReplicaSetAvailable
-  Available      True    MinimumReplicasAvailable
-OldReplicaSets:  <none>
-NewReplicaSet:   greeter-00001-deployment-87b6675d9 (0/0 replicas created)
-Events:          <none>
-=================== hello-00001-deployment ===================
-Conditions:
-  Type           Status  Reason
-  ----           ------  ------
-  Progressing    True    NewReplicaSetAvailable
-  Available      True    MinimumReplicasAvailable
-OldReplicaSets:  <none>
-NewReplicaSet:   hello-00001-deployment-766d88749b (1/1 replicas created)
-Events:
-  Type    Reason             Age                From                   Message
-  ----    ------             ----               ----                   -------
-  Normal  ScalingReplicaSet  9h (x7 over 16h)   deployment-controller  Scaled down replica set hello-00001-deployment-766d88749b to 0
-  Normal  ScalingReplicaSet  9h (x7 over 16h)   deployment-controller  Scaled up replica set hello-00001-deployment-766d88749b to 1
-  Normal  ScalingReplicaSet  41m (x5 over 89m)  deployment-controller  Scaled down replica set hello-00001-deployment-766d88749b to 0
-  Normal  ScalingReplicaSet  41m (x5 over 89m)  deployment-controller  Scaled up replica set hello-00001-deployment-766d88749b to 1
----
+
+	=================== greeter-00001-deployment ===================
+	Conditions:
+	  Type           Status  Reason
+	  ----           ------  ------
+	  Progressing    True    NewReplicaSetAvailable
+	  Available      True    MinimumReplicasAvailable
+	OldReplicaSets:  <none>
+	NewReplicaSet:   greeter-00001-deployment-87b6675d9 (0/0 replicas created)
+	Events:          <none>
+	=================== hello-00001-deployment ===================
+	Conditions:
+	  Type           Status  Reason
+	  ----           ------  ------
+	  Progressing    True    NewReplicaSetAvailable
+	  Available      True    MinimumReplicasAvailable
+	OldReplicaSets:  <none>
+	NewReplicaSet:   hello-00001-deployment-766d88749b (1/1 replicas created)
+	Events:
+	  Type    Reason             Age                From                   Message
+	  ----    ------             ----               ----                   -------
+	  Normal  ScalingReplicaSet  9h (x7 over 16h)   deployment-controller  Scaled down replica set hello-00001-deployment-766d88749b to 0
+	  Normal  ScalingReplicaSet  9h (x7 over 16h)   deployment-controller  Scaled up replica set hello-00001-deployment-766d88749b to 1
+	  Normal  ScalingReplicaSet  41m (x5 over 89m)  deployment-controller  Scaled down replica set hello-00001-deployment-766d88749b to 0
+	  Normal  ScalingReplicaSet  41m (x5 over 89m)  deployment-controller  Scaled up replica set hello-00001-deployment-766d88749b to 1
+
 
 |===
 ====
