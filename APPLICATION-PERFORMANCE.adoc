@@ -9,7 +9,7 @@
 |Troubleshoot Focus Areas
 |How to Troubleshoot
 
-|*Cause 1: Failed Connections*
+|*Cause 1: Failed Connections*[[failed_connections]]
 |
 |
 
@@ -36,53 +36,53 @@
 
 * link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
-|1
+|
+| c) Calling service is part of a different Service Mesh than called service  
 | - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts] 
+
+|
+| d) Service Mesh configuration of GateWay for that service does not exist or does not expose the service correctly (hostname etc.)
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+
+|
+| e) OCP Route to service does not exist
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+
+|
+| f) Service Mesh envoy have the correct/up-to-date configurations
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
+
+|*Cause 2: Slow Responses*[[slow_responses]]
+|
 |
 
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
-|
+|POD/Deployment resource configuration limits reached
+| a) CPU/RAM/Network/Persistence POD Limits
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
-|
+|POD numbers < replicas defined in Deployment
+| a) Deployment State
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts
 
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 |
+| b) Resource Limits
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
-|
+|Restarting PODs
+| a) POD Restarts
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restar
 
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
-|
+|Application Configurations
+| a) Application Logging level
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restar
 
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 |
+| b) Backed up requests towards failing/slow service
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts
 
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 |
-
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
-|
-
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
-|
-
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
-|
-
-|1
-|link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
-|
+| c) Retries towards failing/slow service
+| - link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts
 
 |===
 ====
