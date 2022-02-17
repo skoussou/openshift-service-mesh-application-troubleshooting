@@ -1,4 +1,4 @@
-= Symptom: Application Performance Problems
+= Symptom: Application (in the Service Mesh) Performance  Problems
 :toc:
 
 
@@ -14,11 +14,11 @@
 |
 
 |Mutual TLS failures
-| a) Client/Service Mesh certificates configurations (Service Mesh GateWay)
+| a) Client/Service Mesh certificates configurations (Service Mesh `Gateway`)
 | - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-certificates[Check Service Mesh Certificates and Service Mesh Configs]
 
 |
-| b) Service Mesh ServiceEntry certificates configuration
+| b) Service Mesh `ServiceEntry` certificates configuration
 | - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-certificates[Check Service Mesh Certificates and Service Mesh Configs]
 
 |Authorisation failures
@@ -26,34 +26,34 @@
 | - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-certificates[Check Service Mesh Security settings]
 
 |Network issues
-| a) Calling service is deployed in an OCP worker node or OCP cluster which does not have access to the node/cluster where the called service POD is deployed
-| - link:[Check Node Calling/Called PODs Deployed and if CLUSTER n/w connectivity is available]
+| a) Calling service is deployed in an OCP worker node or a different OCP cluster which does not have access to the node/cluster where the called service POD is deployed
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-deployment-location[Check Node Calling/Called PODs Deployed and if CLUSTER n/w connectivity is available]
 
 | 
 | b) Calling service is not in service mesh but called service is in the Service Mesh continuously restarts]
 |
-- link:[Check PODs are in the same Service Mesh]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-is-in-the-service-mesh[Check PODs are in the same Service Mesh]
 
-- link:[Check if service mesh configuration allows calls to external services]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-certificates[Check if service mesh configuration allows calls to external services]
 
 |
 | c) Calling service is part of a different Service Mesh than called service  
-| - link:[Check PODs are in the same Service Mesh by comparing namespaces in the ServiceMeshMemberRoll]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-is-in-the-service-mesh[Check PODs are in the same Service Mesh by comparing namespaces in the `ServiceMeshMemberRoll`]
 
 |
-| d) Service Mesh configuration of GateWay for that service does not exist or does not expose the service correctly (hostname etc.)
-| - link:[Check Service Mesh Network Configurations allow access to services]
+| d) Service Mesh configuration of `Gateway` for that service does not exist or does not expose the service correctly (hostname etc.)
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-certificates[Check Service Mesh Network Configurations allow access to services]
 
 |
 | e) OCP Route to service does not exist
-| - link:[Check Service Mesh Network Configurations allow access to services]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-certificates[Check Service Mesh Network Configurations allow access to services]
 
 |
 | f) Service Mesh envoy have the correct/up-to-date configurations
 | 
-- link:[Check Service Mesh Operator State]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#anchor-1[Check Service Mesh Operator State]
 
-- link:[Troubleshoot Service Mesh Configuration]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-deep-dive-troubleshooting-actions-envoyistio-proxy[Troubleshoot Service Mesh Configuration]
 
 |*Cause 2: Slow Responses*
 |
@@ -61,47 +61,47 @@
 
 |POD/Deployment resource configuration limits reached
 | a) CPU/RAM/Network/Persistence POD Limits
-| - link:[Check POD Containers Resources Usage]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-resources-usage[Check POD Containers Resources Usage]
 
 |POD numbers < replicas defined in Deployment
 | a) Deployment State
-| - link:[POD Replicas Desired/Created]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#anchor-5[POD Replicas Desired/Created]
 
 |
 | b) Resource Limits
 | 
-- link:[Check if ResourceQuota applied on namespace affecting deployment]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#check-resource-quotas-limit-ranges[Check if ResourceQuota applied on namespace affecting deployment]
 
-- link:[Check if LimitRange have been applied affecting deployment]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#check-resource-quotas-limit-ranges[Check if LimitRange have been applied affecting deployment]
 
 |Restarting PODs
 | a) POD Restarts
 | 
-- link:[Check for constant/often restarts of the POD]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-restarts[Check for constant/often restarts of the POD]
 
-- link:[Check POD & Cluster Events]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cluster-events[Check POD & Cluster Events]
 
 
 |Application Configurations
 | a) Application Logging level
 | 
-- link:[Check if Application Logging Levels are too high] (INFO normal, DEBUG/TRACE too high for all containers)
-- link:[Check Logging Levels of Service Mesh Components ] (`istio-proxy` in case access logging set to ON and Level too high)
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#application-logs[Check if Application Logging Levels are too high] (INFO normal, DEBUG/TRACE too high for all containers)
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#check-set-logging-levels-of-service-mesh-components[Check Logging Levels of Service Mesh Components ] (`istio-proxy` in case access logging set to ON and Level too high)
 
 |
 | b) Backed up requests towards failing/slow service
 | 
-- link:[Check Application Logs]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#application-logs[Check Application Logs]
 
-- link:[Validate Configurations/Errors with Service Mesh Observability]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-observability[Validate Configurations/Errors with Service Mesh Observability]
 
 
 |
 | c) Retries towards failing/slow service
 | 
-- link:[Check Application Logs]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#application-logs[Check Application Logs]
 
-- link:[Validate Configurations/Errors with Service Mesh Observability]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-observability[Validate Configurations/Errors with Service Mesh Observability]
 
 |===
 ====
