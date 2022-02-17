@@ -532,6 +532,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 
 * Envoy Proxy Config Dump
 ** From any deployed application with an istio-proxy sidecar container, run:
+
 	oc rsh pod <istio_sidecar_pod_name> -c istio-proxy curl -X POST localhost:15000/config_dump
 
 ** Then look for the envoy cluster name where you want to enable mTLS + gRPC, and its config should look like:
