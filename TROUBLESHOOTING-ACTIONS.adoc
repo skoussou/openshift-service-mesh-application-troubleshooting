@@ -191,7 +191,7 @@ Check Internal Registry connectivity
 
 === POD Deployment Location
 
-* Check the worker node service is deployed at
+* Check the worker node a service is deployed at
 
 	oc get pod -o wide
 
@@ -203,7 +203,7 @@ Check Internal Registry connectivity
 === POD Defined Tolerations
 
 * Read documentation on link:https://docs.openshift.com/container-platform/4.9/nodes/scheduling/nodes-scheduler-taints-tolerations.html[Controlling pod placement using node taints]
-* Check if POD defined toleration are matched
+* Check if POD defined tolerations are matched
 
 	oc describe pod istio-ingressgateway-766bbd5894-q8vdn |grep -A 3 "Tolerations:"
 
@@ -215,10 +215,12 @@ Check Internal Registry connectivity
 
 === Selectors Validation
 
+* The following screenshots show the way that selectors can be checked and validated
++
 image::./images/2-tolerations-validations.png[700,700]
-
++
 image::./images/3-tolerations-validations.png[700,700]
-
++
 image::./images/4-tolerations-validations.png[700,700]
 
 == 3 - Service Mesh
