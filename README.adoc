@@ -1,6 +1,6 @@
 = Troubleshooting Application in OpenShift and in a Service Mesh
 
-The aim of this repository is to gather guidance on how to troubleshoot platform, service mesh, deployment and application issues based on the known `symptoms of failure`
+The aim of this repository is to gather guidance on how to troubleshoot platform, service mesh, deployment and application issues based on a given `symptom of failure`. The repository employs a mixture of hands-on actions, official documentation and public resources in order to educate and guide on the possible causes of issues, the focus areas where troubleshooting and information gathering can take place and the methods to do that.
 
 
 .Reported Symptoms of Application failure

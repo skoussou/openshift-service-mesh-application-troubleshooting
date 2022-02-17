@@ -2,6 +2,8 @@
 :toc:
 
 
+WARNING: Pre-requisites include access to the cluster (some of the actions may require elevated rights) and a set of tools as mentioned in link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#tool-prerequisites[Tool Prerequisites]
+
 ====
 [cols="3*^",options="header"]
 |===
