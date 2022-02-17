@@ -151,13 +151,13 @@ Check Internal Registry connectivity
 
 	oc get StorageClass
 
-* Check StorageClass characteristics
+* Check `StorageClass` characteristics
 
 	oc describe StorageClass <storageclass-name>
 
 === Check Resource Quotas & Limit Ranges
 
-* ResourceQuota sets aggregate quota restrictions enforced per namespace and can be found in OCP Console <CONSOLE-URL>/k8s/ns//openshift-machine-api/resourcequotas
+* `ResourceQuota` sets aggregate quota restrictions enforced per namespace and can be found in OCP Console link:[<CONSOLE-URL>/k8s/ns/openshift-machine-api/resourcequotas]
 
 	apiVersion: v1
 	kind: ResourceQuota
@@ -173,7 +173,7 @@ Check Internal Registry connectivity
 	   limits.memory: 2Gi
 
 
-* LimitRange sets resource usage limits for each kind of resource in a Namespace and can be found in OCP Console `<CONSOLE-URL>/k8s/ns/openshift-machine-api/limitranges`
+* `LimitRange` sets resource usage limits for each kind of resource in a Namespace and can be found in OCP Console link:[<CONSOLE-URL>/k8s/ns/openshift-machine-api/limitranges]
 
 	apiVersion: v1
 	kind: LimitRange
