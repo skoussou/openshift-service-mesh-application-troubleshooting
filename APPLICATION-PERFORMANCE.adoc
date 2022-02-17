@@ -52,7 +52,7 @@ WARNING: Pre-requisites include access to the cluster (some of the actions may r
 |
 | f) Service Mesh envoy have the correct/up-to-date configurations
 | 
-- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#anchor-1[Check Service Mesh Operator State]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-operator-state[Check Service Mesh Operator State]
 
 - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-deep-dive-troubleshooting-actions-envoyistio-proxy[Troubleshoot Service Mesh Configuration]
 
@@ -66,7 +66,7 @@ WARNING: Pre-requisites include access to the cluster (some of the actions may r
 
 |POD numbers < replicas defined in Deployment
 | a) Deployment State
-| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#anchor-5[POD Replicas Desired/Created]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-replicas-desiredcreated[POD Replicas Desired/Created]
 
 |
 | b) Resource Limits
