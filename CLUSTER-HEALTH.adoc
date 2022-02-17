@@ -16,26 +16,26 @@
 |Cluster cannot offer resources CPU/RAM/Persistence required by the POD 
 | a) Cluster state
 | 
-- link:[Cluster Events]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cluster-events[Cluster Events]
 
-- link:[Cluster Router]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cluster-router[Cluster Router]
 
-- link:[Registry]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#internal-registry[Registry]
 
 |
 | b) Cluster resources state
-| - link:[CPU & RAM Nodes Inspection]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cpu-ram-nodes-inspection[CPU & RAM Nodes Inspection]
 
 |
 | c) Worker Nodes Failing/Stopped/Missing
-| - link:[Machine Configs & State]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#nodes-machine-configs-and-states[Machine Configs & State]
 
 |
 | d) Persistence Layer Failures 
 | 
-- link:[Check PersistentVolume and PersistentVolumeClaim State]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#persistentvolume-and-persitentvolumeclaim-state[Check PersistentVolume and PersistentVolumeClaim State]
 
-- link:[Persistence StorageClass ]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#storageclass-availability-configuration[Persistence StorageClass]
 
 |*Cause 2: Cluster Config related*
 |
@@ -43,36 +43,36 @@
 
 | POD # or Deployment CPU/RAM resource request/limits beyond allowed limits
 | a) Resource Quotas (resource `ResourceQuota`)
-| - link:[Check if ResourceQuota applied on namespace]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#check-resource-quotas-limit-ranges[Check if ResourceQuota applied on namespace]
 
 |
 | b) Resource `LimitRange`
-| - link:[Check if LimitRange have been applied]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#check-resource-quotas-limit-ranges[Check if LimitRange have been applied]
 
 | Networking failures/misalignments
 | a) Failed to pull required images from registry
-| - link:[Cluster Events]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cluster-events[Cluster Events]
 
 | 
 | b) Failed to connect to services on other worker nodes
-| - link:[Check Node Calling/Called PODs Deployed and if CLUSTER n/w connectivity is available]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-deployment-location[Check Node Calling/Called PODs Deployed and if CLUSTER n/w connectivity is available]
 
 | `PestistentVolume` and/or `StorageClass` Config Issues
 | a) PVs not bounding due to Persistence Layer issue
 | 
-- link:[Check PersistentVolume and PersistentVolumeClaim State]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#persistentvolume-and-persitentvolumeclaim-state[Check PersistentVolume and PersistentVolumeClaim State]
 
-- link:[Cluster Events]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cluster-events[Cluster Events]
 
 |
 | b) PVs not finding StorgeClass 
-| - link:[Check PersistentVolume and PersistentVolumeClaim State]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#persistentvolume-and-persitentvolumeclaim-state[Check PersistentVolume and PersistentVolumeClaim State]
 
 | 
 | c) No storage left
 | Check with OCP monitoring team on Storage state
 
-- link:[For single POD check PV storage]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#persistentvolume-and-persitentvolumeclaim-state[For single POD check PV storage]
 
 
 
@@ -82,44 +82,44 @@
 
 | Dependent Services unavailable
 | a) Have not been instantiated
-| - link:[Check the deployments of dependent services have at least 1 POD running (in SM check via KIALI)]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#service-mesh-observability[Check the deployments of dependent services have at least 1 POD running (in SM check via KIALI)]
 
 |
 | b) Networking access is not available 
 | 
-- link:[Check Node Calling/Called PODs Deployed and if CLUSTER n/w connectivity is available]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-deployment-location[Check Node Calling/Called PODs Deployed and if CLUSTER n/w connectivity is available]
 
-- link:[Check if POD part of the Service Mesh]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-is-in-the-service-mesh[Check if POD part of the Service Mesh]
 
 | Containerized application fails
 | a) Problem with the containerized application
 | 
-- link:[How do I debug an application that fails to start up?]
+- link:https://cookbook.openshift.org/logging-monitoring-and-debugging/how-do-i-debug-an-application-that-fails-to-start-up.html[How do I debug an application that fails to start up?]
 
-- link:[Check Application Logs for application errors]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#application-logs[Check Application Logs for application errors]
 
-- link:[Check POD Events to ensure images downloaded successfully]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cluster-events[Check POD Events to ensure images downloaded successfully]
 
-- link:[Check Registry to ensure images can be downloaded]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#internal-registry[Check Registry to ensure images can be downloaded]
 
 | Labelling, Scheduling, Taints & Toleration Misalignments
 | a) Scheduling with Affinity/Anti-Affinity
 | 
-- link:[Checking placement of POD based on Affinity and Anti-Affinity Rules]
+- link:https://docs.openshift.com/container-platform/4.9/nodes/scheduling/nodes-scheduler-pod-affinity.html[Checking placement of POD based on Affinity and Anti-Affinity Rules]
 
-- link:[Checking placement of POD based on nodes using node affinity rules]
+- link:https://docs.openshift.com/container-platform/4.9/nodes/scheduling/nodes-scheduler-node-affinity.html[Checking placement of POD based on nodes using node affinity rules]
 
 |
 | b) Selectors
-| - link:[Selectors Validation to ensure OCP configs are as expected]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#selectors-validation[Selectors Validation to ensure OCP configs are as expected]
 
 |
 | c) Node Selectors
-| - link:[Check existence/matching of POD to Node defined selectors]
+| - link:https://docs.openshift.com/container-platform/4.9/nodes/scheduling/nodes-scheduler-node-selectors.html[Check existence/matching of POD to Node defined selectors]
 
 |
 | d) Taints/Tolerations
-| - link:[Check POD Defined Tolerations and Node defined Taints]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-defined-tolerations[Check POD Defined Tolerations and Node defined Taints]
 
 |*Cause 4: Deployment Related*
 |
@@ -127,49 +127,49 @@
 
 | Failed Readiness/Liveness Healthchecks
 | a) `Deployment`/`DeploymentConfig` Resource POD replicas `Not Equal` to started PODs
-| - link:[Check if the # of Deployed PODs is correct]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-replicas-desiredcreated[Check if the # of Deployed PODs is correct]
 
 | 
 | b) Events showing Health Checks failures and/or timeouts
-| - link:[Check POD Events]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cluster-events[Check POD Events]
 
 | 
 | c) Restarts of the POD
-| - link:[Check POD Restarts for indication of errors]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#pod-replicas-desiredcreated[Check POD Restarts for indication of errors]
 
 | Erroneous Deployment configs
 | a) Failing init-containers
 | 
-- link:[Check POD Events]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cluster-events[Check POD Events]
 
-- link:[Check Application Logs]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#application-logs[Check Application Logs]
 
 |
 | b) Expected image not available in registry, repository
-| - link:[Check POD & Cluster Events to ensure availability]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cluster-events[Check POD & Cluster Events to ensure availability]
 
 |
 | c) Expected image or registry not reachable (network, security)
-| - link:[Check POD & Cluster Events]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#cluster-events[Check POD & Cluster Events]
 
 |
 | d) Erroneous Environment Variable Configurations 
 | This is not easily identifiable other than by
 
-- link:[Check for errors in Application Logs]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#application-logs[Check for errors in Application Logs]
 
 - Check expected environment variables based on application documentation
 
 | PesistenceVolume/StorageClass Issues
 | a) StorageClass does not offer auto creation of PesistenceVolume
 | 
-- link:[Check PersistentVolume and PersistentVolumeClaim State]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#persistentvolume-and-persitentvolumeclaim-state[Check PersistentVolume and PersistentVolumeClaim State]
 
-- link:[Persistence StorageClass]
+- link:[https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#storageclass-availability-configurationPersistence StorageClass]
 
 |
 | b) StorageClass does not offer characteristics required by Deployment (ReadWriteMany etc.)
-| - link:[Persistence StorageClass ]
+| - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#storageclass-availability-configuration[Persistence StorageClass ]
 
 |===
 ====
