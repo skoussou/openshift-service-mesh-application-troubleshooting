@@ -14,7 +14,7 @@ The aim of this repository is to gather guidance on how to troubleshoot platform
 |link:./CLUSTER-HEALTH.adoc[Application POD does not start or continuously restarts]
 
 |2
-|link:./APPLICATION-PERFORMANCE.adoc[Application performance problems]
+|link:./APPLICATION-PERFORMANCE.adoc[Application (in Service Mesh) performance problems]
 
 |3
 |link:./APPLICATION-FUNCTIONALITY.adoc[Application functional problemss]
