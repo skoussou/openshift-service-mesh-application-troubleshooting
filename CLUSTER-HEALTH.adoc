@@ -165,7 +165,7 @@
 | 
 - link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#persistentvolume-and-persitentvolumeclaim-state[Check PersistentVolume and PersistentVolumeClaim State]
 
-- link:[https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#storageclass-availability-configurationPersistence StorageClass]
+- link:https://github.com/skoussou/openshift-service-mesh-application-troubleshooting/blob/main/TROUBLESHOOTING-ACTIONS.adoc#storageclass-availability-configuration[Persistence StorageClass]
 
 |
 | b) StorageClass does not offer characteristics required by Deployment (ReadWriteMany etc.)
