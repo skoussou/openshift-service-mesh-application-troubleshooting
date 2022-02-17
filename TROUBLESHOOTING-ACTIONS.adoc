@@ -531,7 +531,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 
 
 * Envoy Proxy Config Dump
-** From any deployed application with an istio-proxy sidecar container, run:
+** From any deployed application with an `istio-proxy` sidecar container, run:
 
 	oc rsh pod <istio_sidecar_pod_name> -c istio-proxy curl -X POST localhost:15000/config_dump
 
@@ -551,6 +551,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 	...
 
 ** After the changes have been applied the same instruction would return:
+
 	...
 	"cluster": {
 	      "name": "outbound|443|custom|istio-custom-egressgateway.istio-system.svc.cluster.local",
@@ -564,6 +565,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 		            "H2"
 		        ]
 	...
+	
 * xref:anchor-7[Follow Appendix D: Analyze Envoy Clusters Config]
 * link:https://www.tetrate.io/blog/debugging-your-istio-networking-configuration/[How to debug your Istio networking configuration]
 
