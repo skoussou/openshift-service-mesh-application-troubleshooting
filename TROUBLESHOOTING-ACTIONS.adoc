@@ -462,7 +462,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 
 === Service Mesh (Deep Dive) Troubleshooting Actions - Envoy(istio-proxy)
 
-* Debug Service Mesh configurations (and their state). Required knowledge includes: link:https://jvns.ca/blog/2018/10/27/envoy-basics/[Envoy Basics (clusters, listeners, routes, and filters as well as discovery services -xDs,LDS,CDS,RDS) Understanding]
+* Debug Service Mesh configurations (and their state). First MUST acquire knowledge on: link:https://jvns.ca/blog/2018/10/27/envoy-basics/[Envoy Basics (clusters, listeners, routes, and filters as well as discovery services -xDs,LDS,CDS,RDS) Understanding]
 
 ** Get an overview of your mesh and if things are in `SYNC` between control and data planes (if not and it remains this way some restarts of control/data plane components or the cause behind this mismatch by checking logs may be required)
 
@@ -474,7 +474,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 	quarkus-rest-503-2-w77v8.greetings-service                     SYNCED     SYNCED     SYNCED     SYNCED       istiod-tenant-4-75f7766b69-hd2d4     1.6.14
 	rest-greeting-remote-3-2kw74.greetings-service                 SYNCED     SYNCED     SYNCED     SYNCED       istiod-tenant-4-75f7766b69-hd2d4     1.6.14
 
-** Retrieve differences between envoy settings (Service Mesh istio-proxy containers and istio-ingress/istio-egress PODs)  and istiod
+** Retrieve differences between envoy settings (Service Mesh `istio-proxy` containers and `istio-ingressgateway`/`istio-egressgateway` PODs) and `istiod`
 
 	/istioctl proxy-status -i <ISTO SMCP namespace-name> <pod-name>
 	Clusters Match
@@ -484,7 +484,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 * Deep dive into Envoy configuration. Follow steps link:https://istio.io/latest/docs/ops/diagnostic-tools/proxy-cmd/#deep-dive-into-envoy-configuration[1-5 Debugging Envoy and Istiod] to verify configurations
 ** _listeners_ on ports you expect requests to arrive
 ** _route_ for the listener on that port will be pointing to the expected cluster
-** envoy will be sending the request on the _route_ and this will be resolving to the endpoints (PODs)
+** `istio-proxy` (envoy) sidecar will be sending the request on the _route_ and this will be resolving to the endpoints (PODs)
 ** Step 6
 
 	/istioctl pc endpoints istio-egressgateway-5f6d75944c-twmls |grep hello
