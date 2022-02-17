@@ -71,6 +71,7 @@
 | 
 | c) No storage left
 | Check with OCP monitoring team on Storage state
+
 - link:[For single POD check PV storage]
 
 
