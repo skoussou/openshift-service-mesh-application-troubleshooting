@@ -140,7 +140,7 @@ Check Internal Registry connectivity
 	oc get pvc -n <namespace-name>
 
 * link:https://docs.openshift.com/container-platform/4.7/virt/logging_events_monitoring/virt-diagnosing-datavolumes-using-events-and-conditions.html[Diagnosing data volumes using events and conditions]
-* Space left in PV (Best to check on overall storage availability)
+* Space left in PV (*NOTE*: Best to check on overall storage availability)
   ** If ‘df’ exists in the POD
 
 	kubectl -n <namespace-name> exec <pod-name> -- df -h
