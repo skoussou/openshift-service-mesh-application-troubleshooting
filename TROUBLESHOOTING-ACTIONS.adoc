@@ -128,7 +128,7 @@ Check Internal Registry connectivity
 
 === POD Restarts
 
-* POD Restarts for all pods (Taken from kubectl cheatsheet)
+* Number of POD Restarts for all pods
 
 	oc get pods -A --sort-by='.status.containerStatuses[0].restartCount'
 
