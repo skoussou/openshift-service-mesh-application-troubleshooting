@@ -64,6 +64,8 @@ CLI to interact with Service Mesh sidecar (Envoy Proxy). Can be downloaded from 
 
 	oc -n openshift-ingress get deployment
 
+* Enable link:https://docs.openshift.com/container-platform/4.8/networking/ingress-operator.html[access logging for the Router PODs] when debugging incoming traffic to Service Mesh 
+
 === Internal Registry
 
 * Check Internal Registry running
