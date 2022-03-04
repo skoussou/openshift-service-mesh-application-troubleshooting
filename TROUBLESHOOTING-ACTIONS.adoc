@@ -247,6 +247,8 @@ image::./images/4-tolerations-validations.png[700,700]
 
 === Check & Set Logging Levels of Service Mesh Components
 * link:https://access.redhat.com/documentation/en-us/openshift_container_platform/4.7/html-single/service_mesh/index#enabling-envoy-access-logs[Enabling Envoy access logs] for the whole Service Mesh (ie. `istio-proxy` containers and ingress/egress gateways)
+** Note: Check xref:anchor-9[Appendix F: Envoy Logs Parsing] and xref:anchor-8[Appendix E: Response Flags] to understand the logs
+
 * link:https://access.redhat.com/solutions/6106461[How to change log level of specific components or protocols on the istio-proxy sidecar]
 
 	./istioctl proxy-config log my-app.my-app-project  (checking istio-proxy Log Levels)
@@ -1037,6 +1039,92 @@ See link:https://medium.com/namely-labs/a-crash-course-for-running-istio-1c61259
 	15010                                                          istiod-basic.istio-system, istiod-basic.istio-system.svc.cluster + 1 more...                               /*                     
 	15014                                                          istiod-basic.istio-system, istiod-basic.istio-system.svc.cluster + 1 more...                               /*                     
 		                                                       *                                                                                                          /healthz/ready
+
+
+[[anchor-8]]
+== Appendix E: Response Flags
+
+=== Envoy Observability Response Flags
+
+See link:https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#access-logging[%RESPONSE_FLAGS%]
+
+Additional details about the response or connection, if any. For TCP connections, the response codes mentioned in the descriptions do not apply. Possible values are:
+
+* *HTTP and TCP*
+`UH`: No healthy upstream hosts in upstream cluster in addition to 503 response code.
+`UF`: Upstream connection failure in addition to 503 response code.
+`UO`: Upstream overflow (circuit breaking) in addition to 503 response code.
+`NR`: No route configured for a given request in addition to 404 response code, or no matching filter chain for a downstream connection.
+`URX`: The request was rejected because the upstream retry limit (HTTP) or maximum connect attempts (TCP) was reached.
+`NC`: Upstream cluster not found.
+`DT`: When a request or connection exceeded max_connection_duration or max_downstream_connection_duration.
+
+* *HTTP only*
+`DC`: Downstream connection termination.
+`LH`: Local service failed health check request in addition to 503 response code.
+`UT`: Upstream request timeout in addition to 504 response code.
+`LR`: Connection local reset in addition to 503 response code.
+`UR`: Upstream remote reset in addition to 503 response code.
+`UC`: Upstream connection termination in addition to 503 response code.
+`DI`: The request processing was delayed for a period specified via fault injection.
+`FI`: The request was aborted with a response code specified via fault injection.
+`RL`: The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code.
+`UAEX`: The request was denied by the external authorization service.
+`RLSE`: The request was rejected because there was an error in rate limit service.
+`IH`: The request was rejected because it set an invalid value for a strictly-checked header in addition to 400 response code.
+`SI`: Stream idle timeout in addition to 408 response code.
+`DPE`: The downstream request had an HTTP protocol error.
+`UPE`: The upstream response had an HTTP protocol error.
+`UMSDR`: The upstream request reached max stream duration.
+`OM`: Overload Manager terminated the request.
+`DF`: The request was terminated due to DNS resolution failure.
+
+=== Access Logging Response Flags
+
+See link:https://www.envoyproxy.io/docs/envoy/v1.8.0/configuration/access_log[%RESPONSE_FLAGS%]
+
+Additional details about the response or connection, if any. For TCP connections, the response codes mentioned in the descriptions do not apply. Possible values are:
+
+* *HTTP and TCP*
+`UH`: No healthy upstream hosts in upstream cluster in addition to 503 response code.
+`UF`: Upstream connection failure in addition to 503 response code.
+`UO`: Upstream overflow (circuit breaking) in addition to 503 response code.
+`NR`: No route configured for a given request in addition to 404 response code.
+
+* *HTTP only*
+`LH`: Local service failed health check request in addition to 503 response code.
+`UT`: Upstream request timeout in addition to 504 response code.
+`LR`: Connection local reset in addition to 503 response code.
+`UR`: Upstream remote reset in addition to 503 response code.
+`UC`: Upstream connection termination in addition to 503 response code.
+`DI`: The request processing was delayed for a period specified via fault injection.
+`FI`: The request was aborted with a response code specified via fault injection.
+`RL`: The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code.
+
+
+[[anchor-9]]
+== Appendix F: Envoy Logs Parsing
+
+From  
+
+* link:https://medium.com/@nitishmalhotra/engarde-parse-envoy-and-istio-proxy-logs-like-a-champ-faec31c563e7[Engarde : Parse envoy and istio-proxy access logs like a champ  ]
+* link:https://blog.getambassador.io/understanding-envoy-proxy-and-ambassador-http-access-logs-fee7802a2ec5[Understanding Envoy Proxy HTTP Access Logs]
+
+* _default log format_
+
+	[%START_TIME%] "%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %PROTOCOL%" %RESPONSE_CODE% %RESPONSE_FLAGS% %BYTES_RECEIVED% %BYTES_SENT% %DURATION% %RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)% "%REQ(X-FORWARDED-FOR)%" "%REQ(USER-AGENT)%" "%REQ(X-REQUEST-ID)%" "%REQ(:AUTHORITY)%" "%UPSTREAM_HOST%"\n
+
+* which results in log lines as follows,
+
+	[2016-04-15T20:17:00.310Z] "POST /api/v1/locations HTTP/2" 204 - 154 0 226 100 "10.0.35.28" "nsq2http" "cc21d9b0-cf5c-432b-8c7e-98aeb7988cd2" "locations" "tcp://10.0.2.1:80"
+
+image::./images/10-engoy-log-parse.jpeg[400,1000]
+
+
+[Note]
+=====
+The format for envoy text-based access logs for Istio 1.3 onwards adds `%REQUESTED_SERVER_NAME% %ROUTE_NAME%` (SNI value for downstream host, the name of the route) at the ba
+=====
 
 
 
