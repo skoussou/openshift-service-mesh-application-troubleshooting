@@ -1051,33 +1051,33 @@ See link:https://www.envoyproxy.io/docs/envoy/latest/configuration/observability
 Additional details about the response or connection, if any. For TCP connections, the response codes mentioned in the descriptions do not apply. Possible values are:
 
 * *HTTP and TCP*
-`UH`: No healthy upstream hosts in upstream cluster in addition to 503 response code.
-`UF`: Upstream connection failure in addition to 503 response code.
-`UO`: Upstream overflow (circuit breaking) in addition to 503 response code.
-`NR`: No route configured for a given request in addition to 404 response code, or no matching filter chain for a downstream connection.
-`URX`: The request was rejected because the upstream retry limit (HTTP) or maximum connect attempts (TCP) was reached.
-`NC`: Upstream cluster not found.
-`DT`: When a request or connection exceeded max_connection_duration or max_downstream_connection_duration.
+** `UH`: No healthy upstream hosts in upstream cluster in addition to 503 response code.
+** `UF`: Upstream connection failure in addition to 503 response code.
+** `UO`: Upstream overflow (circuit breaking) in addition to 503 response code.
+** `NR`: No route configured for a given request in addition to 404 response code, or no matching filter chain for a downstream connection.
+** `URX`: The request was rejected because the upstream retry limit (HTTP) or maximum connect attempts (TCP) was reached.
+** `NC`: Upstream cluster not found.
+** `DT`: When a request or connection exceeded max_connection_duration or max_downstream_connection_duration.
 
 * *HTTP only*
-`DC`: Downstream connection termination.
-`LH`: Local service failed health check request in addition to 503 response code.
-`UT`: Upstream request timeout in addition to 504 response code.
-`LR`: Connection local reset in addition to 503 response code.
-`UR`: Upstream remote reset in addition to 503 response code.
-`UC`: Upstream connection termination in addition to 503 response code.
-`DI`: The request processing was delayed for a period specified via fault injection.
-`FI`: The request was aborted with a response code specified via fault injection.
-`RL`: The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code.
-`UAEX`: The request was denied by the external authorization service.
-`RLSE`: The request was rejected because there was an error in rate limit service.
-`IH`: The request was rejected because it set an invalid value for a strictly-checked header in addition to 400 response code.
-`SI`: Stream idle timeout in addition to 408 response code.
-`DPE`: The downstream request had an HTTP protocol error.
-`UPE`: The upstream response had an HTTP protocol error.
-`UMSDR`: The upstream request reached max stream duration.
-`OM`: Overload Manager terminated the request.
-`DF`: The request was terminated due to DNS resolution failure.
+** `DC`: Downstream connection termination.
+** `LH`: Local service failed health check request in addition to 503 response code.
+** `UT`: Upstream request timeout in addition to 504 response code.
+** `LR`: Connection local reset in addition to 503 response code.
+** `UR`: Upstream remote reset in addition to 503 response code.
+** `UC`: Upstream connection termination in addition to 503 response code.
+** `DI`: The request processing was delayed for a period specified via fault injection.
+** `FI`: The request was aborted with a response code specified via fault injection.
+** `RL`: The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code.
+** `UAEX`: The request was denied by the external authorization service.
+** `RLSE`: The request was rejected because there was an error in rate limit service.
+** `IH`: The request was rejected because it set an invalid value for a strictly-checked header in addition to 400 response code.
+** `SI`: Stream idle timeout in addition to 408 response code.
+** `DPE`: The downstream request had an HTTP protocol error.
+** `UPE`: The upstream response had an HTTP protocol error.
+** `UMSDR`: The upstream request reached max stream duration.
+** `OM`: Overload Manager terminated the request.
+** `DF`: The request was terminated due to DNS resolution failure.
 
 === Access Logging Response Flags
 
@@ -1086,20 +1086,20 @@ See link:https://www.envoyproxy.io/docs/envoy/v1.8.0/configuration/access_log[%R
 Additional details about the response or connection, if any. For TCP connections, the response codes mentioned in the descriptions do not apply. Possible values are:
 
 * *HTTP and TCP*
-`UH`: No healthy upstream hosts in upstream cluster in addition to 503 response code.
-`UF`: Upstream connection failure in addition to 503 response code.
-`UO`: Upstream overflow (circuit breaking) in addition to 503 response code.
-`NR`: No route configured for a given request in addition to 404 response code.
+** `UH`: No healthy upstream hosts in upstream cluster in addition to 503 response code.
+** `UF`: Upstream connection failure in addition to 503 response code.
+** `UO`: Upstream overflow (circuit breaking) in addition to 503 response code.
+** `NR`: No route configured for a given request in addition to 404 response code.
 
 * *HTTP only*
-`LH`: Local service failed health check request in addition to 503 response code.
-`UT`: Upstream request timeout in addition to 504 response code.
-`LR`: Connection local reset in addition to 503 response code.
-`UR`: Upstream remote reset in addition to 503 response code.
-`UC`: Upstream connection termination in addition to 503 response code.
-`DI`: The request processing was delayed for a period specified via fault injection.
-`FI`: The request was aborted with a response code specified via fault injection.
-`RL`: The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code.
+** `LH`: Local service failed health check request in addition to 503 response code.
+** `UT`: Upstream request timeout in addition to 504 response code.
+** `LR`: Connection local reset in addition to 503 response code.
+** `UR`: Upstream remote reset in addition to 503 response code.
+** `UC`: Upstream connection termination in addition to 503 response code.
+** `DI`: The request processing was delayed for a period specified via fault injection.
+** `FI`: The request was aborted with a response code specified via fault injection.
+** `RL`: The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code.
 
 
 [[anchor-9]]
