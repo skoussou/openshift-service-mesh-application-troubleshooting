@@ -245,6 +245,7 @@ image::./images/4-tolerations-validations.png[700,700]
 	 fi
 	done
 
+[[anchor-10]]
 === Check & Set Logging Levels of Service Mesh Components
 * link:https://access.redhat.com/documentation/en-us/openshift_container_platform/4.7/html-single/service_mesh/index#enabling-envoy-access-logs[Enabling Envoy access logs] for the whole Service Mesh (ie. `istio-proxy` containers and ingress/egress gateways)
 ** Note: Check xref:anchor-9[Appendix F: Envoy Logs Parsing] and xref:anchor-8[Appendix E: Response Flags] to understand the logs
@@ -515,7 +516,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 ** Note: Sometimes Service Mesh configuration can be shown as `STALE` which can be caused by different reasons
 *** link:https://github.com/istio/istio/issues/13822[STALE (Never Acknowledged)]
 *** link:https://stackoverflow.com/questions/51977974/how-to-solve-stale-issue-on-istio-proxy[How to solve "stale" issue on istio proxy?]
-** Action: Check logs for both Pilot and Istio Proxy logs ( link:https://docs.google.com/document/d/1bcIZLT3RaBmS03AFQoIi80Tz-PLurCv4Hq4Mw6DOxxQ/edit#heading=h.asahum77e36t[Check & Set Logging Levels of Service Mesh Components)] to see what is happening. 
+** Action: Check logs for both Pilot and Istio Proxy logs ( xref:anchor-10[Check & Set Logging Levels of Service Mesh Components)] to see what is happening. 
 ** Some resolutions:
 *** Increasing the Pilot replicas if you have not already to see if there is any improvement (eg. a Service Mesh with 100s of namespaces and even more PODs in the mesh)
 *** Removing configurations that may be causing issues (usually start at Gateway and VirtualService) eg.
@@ -537,7 +538,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 * Envoy Proxy Config Dump
 ** From any deployed application with an `istio-proxy` sidecar container, run:
 
-	oc rsh pod <istio_sidecar_pod_name> -c istio-proxy curl -X POST localhost:15000/config_dump
+	oc rsh -c istio-proxy pod/<pod name> curl localhost:15000/config_dump
 
 ** Then look for the envoy cluster name where you want to enable mTLS + gRPC, and its config should look like:
 
