@@ -516,7 +516,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 ** Note: Sometimes Service Mesh configuration can be shown as `STALE` which can be caused by different reasons
 *** link:https://github.com/istio/istio/issues/13822[STALE (Never Acknowledged)]
 *** link:https://stackoverflow.com/questions/51977974/how-to-solve-stale-issue-on-istio-proxy[How to solve "stale" issue on istio proxy?]
-** Action: Check logs for both Pilot and Istio Proxy logs ( xref:anchor-10[Check & Set Logging Levels of Service Mesh Components)] to see what is happening. 
+** Action: Check logs for both Pilot and Istio Proxy logs ( xref:anchor-10/z[Check & Set Logging Levels of Service Mesh Components)] to see what is happening. 
 ** Some resolutions:
 *** Increasing the Pilot replicas if you have not already to see if there is any improvement (eg. a Service Mesh with 100s of namespaces and even more PODs in the mesh)
 *** Removing configurations that may be causing issues (usually start at Gateway and VirtualService) eg.
@@ -588,6 +588,7 @@ image::./images/8-elasticsearch-operator-pod-condition.png[700,700]
 ** link:https://kiali.io/docs/features/tracing/[Checking Tracing withing the Service Mesh with Kiali Console]
 ** link:https://kiali.io/docs/features/validations/[Kiali Validations on Service Mesh Configuration Objects]
 ** link:https://istio.io/latest/docs/tasks/observability/kiali/#viewing-and-editing-istio-configuration-yaml[See some possible errors configuration errors uncovered by KIALI]
+** link:https://medium.com/kialiproject/troubleshooting-envoy-with-kiali-7f78a57b16ad[Troubleshooting Envoy with Kiali]
 * Access link:https://docs.openshift.com/container-platform/4.9/service_mesh/v2x/ossm-troubleshooting-istio.html#ossm-accessing-jaeger-console_troubleshooting-ossm[Jaeger Console]
 
 == 4 - Application
